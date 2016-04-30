@@ -81,11 +81,12 @@ li:hover a {
 	myStore
 </div>
 
-<div style="position: relative; top: 70px;">
+<div style="position: relative; top: 70px; left: 50px;">
 	<ul>
-		<li><a href="#">Home</a></li>
-		<li><a href="#">News</a>	</li>
-		<li><a href="#">Contact </a></li>
-		<li><a href="#">About</a></li>
+		<li><a href="#">Men</a></li>
+		<li><a href="#">Women</a>	</li>
+		<li><a href="#">Electronics</a></li>
+		<li><a href="#">Books & Media</a></li>
+		<li><a href="#">Home & Furniture</a></li>
 	</ul>
 </div>
