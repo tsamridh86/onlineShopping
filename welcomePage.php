@@ -15,6 +15,41 @@ a.logout:in
 	background: yellow;
 	color: green;
 }
+ul {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	position: absolute;
+}
+
+/*Create a horizontal list with spacing*/
+li {
+	display:inline-block;
+	float: left;
+	margin-right: 1px;
+	width: 250px;
+    height: 50px;
+	
+}
+li a {
+	display:block;
+	width:250px;
+	height: 50px;
+	text-align: center;
+	line-height: 50px;
+	font-family:sans-serif;
+	color: white;
+	text-decoration:none;
+	background: gray;
+	/*border-radius:25px;*/
+}
+
+/*Hover state for top level links*/
+li:hover a {
+	background: orange;
+	/*border-radius:25px;*/
+	
+}
 
 </style>
 
@@ -24,7 +59,7 @@ a.logout:in
 		<table cellpadding="0px" cellspacing="0px"> 
 			<tr> 
 			<td style="border-style:solid none solid solid;border-color:#4B7B9F;border-width:1px;">
-				<input type="text" name="zoom_query" style="width:400px; border:0px solid; height:40px; padding:0px 3px; position:relative; font-size: 25px;"> 
+				<input type="text" name="zoom_query" style="width:800px; border:0px solid; height:40px; padding:0px 3px; position:relative; font-size: 25px;"> 
 			</td>
 			<td style="border-style:solid;border-color:#4B7B9F;border-width:1px;"> 
 				<input type="submit" value="" style="border-style: none; background: url('magnifyingGlass.png') no-repeat; width: 40px; height: 40px; background-size: 100% 100%;">
@@ -44,4 +79,13 @@ a.logout:in
 <!-- This div is for the website name / logo -->
 <div style="position: absolute; top: 10px; left: 10px;">
 	myStore
+</div>
+
+<div style="position: relative; top: 70px;">
+	<ul>
+		<li><a href="#">Home</a></li>
+		<li><a href="#">News</a>	</li>
+		<li><a href="#">Contact </a></li>
+		<li><a href="#">About</a></li>
+	</ul>
 </div>
