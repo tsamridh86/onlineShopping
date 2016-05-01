@@ -1,11 +1,16 @@
 <!DOCTYPE html>
-<!-- These css maybe shifted onto another page for convieniece-->
 <head>
 	<link rel="stylesheet" href="welcomePage.css">
 </head>
 
+<!-- This is for the current user that is logged in-->
+<?php
+	session_start();
+	
+?>
+
 <!-- for the search bar -->
-<div style="position: absolute; top : 10px; right:200px;">
+<div style="position: absolute; top : 10px; right:400px;">
 	<form method="get" action=""> 
 		<table cellpadding="0px" cellspacing="0px"> 
 			<tr> 
@@ -20,12 +25,29 @@
 	</form>
 </div>
 
-<!-- Login tab -->
-<div style="position: absolute; top : 10px; right: 10px;">
-	<a class="login" href= "SignUp.php">Sign Up | </a>
-
-	<a class="login" href = "LoginPage.php">Login</a>
+<!-- Login tab will only be displayed if there is no user logged in. -->
+<div style='position: absolute; top : 10px; right: 10px;'>
+<?php
+	if(!$_SESSION['user'])
+		echo "
+			<a class='login' href= 'SignUp.php'>Sign Up | </a>
+			<a class='login' href = 'LoginPage.php'>Login</a>";
+	else 
+		echo "<a class='login' href= #>Welcome ".$_SESSION['user']."</a>";
+		echo "<button onclick = logout() >Logout</button>"; 			
+?>
 </div>
+
+<!--Script for logging out to the user -->
+<script>
+	function logout()
+	{
+		<?php
+		session_destroy(); 
+		?>
+		return false;
+	}
+</script>
 
 <!-- This div is for the website name / logo -->
 <div style="position: absolute; top: 10px; left: 10px;">
