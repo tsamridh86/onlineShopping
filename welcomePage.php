@@ -24,10 +24,11 @@
 	</form>
 </div>
 
-<!-- Login tab will only be displayed if there is no user logged in. -->
+<!-- Login tab will only be displayed if there is no user logged in.
+	 & for a logged in user there will be a logout option -->
 <div style='position: absolute; top : 10px; right: 10px;'>
 <?php
-	
+	error_reporting(0);
 	if(!$_SESSION['user'])
 		echo "
 			<a class='login' href= 'SignUp.php'>Sign Up | </a>

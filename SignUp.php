@@ -1,6 +1,6 @@
 <?php
 	//This page redirects to itself, so, the database actions will take place if & only if all the parameters are sent.
-	if (!empty($_POST['userName']) && !empty($_POST['password']) && !empty($_POST['authority']))
+	if (!empty($_POST['userName']) && !empty($_POST['password']) && !empty($_POST['repassword']) && $_POST['password']==$_POST['repassword'] && !empty($_POST['authority']))
 	{
 		//connect to the server
 		$connect = mysqli_connect("localhost","root","");
@@ -38,6 +38,10 @@
 		<tr>
 			<td>Enter your password : </td>
 			<td><input name = 'password' type ='password' required></td>
+		</tr>
+		<tr>
+			<td>Re-enter your password : </td>
+			<td><input name = 'repassword' type ='password' required></td>
 		</tr>
 		<tr>
 			<td>Authority level : </td>
