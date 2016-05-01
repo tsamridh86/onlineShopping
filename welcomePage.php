@@ -1,57 +1,8 @@
 <!DOCTYPE html>
 <!-- These css maybe shifted onto another page for convieniece-->
-<style type="text/css">
-	a.login
-{
-	position:relative;
-	top:10px; right:10px;
-	font-size:20px;
-	text-decoration:none;
-	color:brown;
-}
-
-a.logout:in
-{
-	background: yellow;
-	color: green;
-}
-ul {
-	list-style-type:none;
-	margin:0;
-	padding:0;
-	position: absolute;
-}
-
-/*Create a horizontal list with spacing*/
-li {
-	display:inline-block;
-	float: left;
-	margin-right: 1px;
-	width: 250px;
-    height: 50px;
-	
-}
-li a {
-	display:block;
-	width:250px;
-	height: 50px;
-	text-align: center;
-	line-height: 50px;
-	font-family:sans-serif;
-	color: white;
-	text-decoration:none;
-	background: gray;
-	/*border-radius:25px;*/
-}
-
-/*Hover state for top level links*/
-li:hover a {
-	background: orange;
-	/*border-radius:25px;*/
-	
-}
-
-</style>
+<head>
+	<link rel="stylesheet" href="welcomePage.css">
+</head>
 
 <!-- for the search bar -->
 <div style="position: absolute; top : 10px; right:200px;">
@@ -81,6 +32,8 @@ li:hover a {
 	myStore
 </div>
 
+
+<!-- This div id for the navigational bar-->
 <div style="position: relative; top: 70px; left: 50px;">
 	<ul>
 		<li><a href="#">Men</a></li>
