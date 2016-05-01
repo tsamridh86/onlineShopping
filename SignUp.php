@@ -20,7 +20,9 @@
 		$que = "insert into users (userName,pswd,autho) values ('".$_POST['userName']."','".$_POST['password']."','".$_POST['authority']."');";
 		$connect->query($que);
 		$connect->close(); 
-		echo '<script type="text/javascript"> alert("Account successfully created"); </script>';
+		echo "<script type='text/javascript'> alert(\"Account successfully created\"); </script>";
+		session_start();
+		$_SESSION['user'] = $_POST['userName'];
 		header("location:welcomePage.php");
 	}
 ?>

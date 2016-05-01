@@ -6,8 +6,6 @@
 <!-- This is for the current user that is logged in-->
 <?php
 	session_start();
-
-	
 ?>
 
 <!-- for the search bar -->
@@ -29,7 +27,7 @@
 <!-- Login tab will only be displayed if there is no user logged in. -->
 <div style='position: absolute; top : 10px; right: 10px;'>
 <?php
-	error_reporting(0);
+	
 	if(!$_SESSION['user'])
 		echo "
 			<a class='login' href= 'SignUp.php'>Sign Up | </a>
@@ -37,21 +35,14 @@
 	else 
 	{
 		echo "<a class='login' href= #>Welcome ".$_SESSION['user']."</a>";
-		echo "<button style = 'background:none; border:none; padding 0; cursor:pointer;'onclick = logout() >Logout</button>"; 			
+		echo "<a class='login' href= 'NLI.php'> | Logout</a>";
+
 	}
+
+	
 ?>
 </div>
 
-<!--Script for logging out to the user -->
-<script>
-	function logout()
-	{
-		<?php
-		session_destroy(); 
-		?>
-		return false;
-	}
-</script>
 
 <!-- This div is for the website name / logo -->
 <div style="position: absolute; top: 10px; left: 10px;">
