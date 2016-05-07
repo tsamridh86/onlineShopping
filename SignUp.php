@@ -19,10 +19,15 @@
 
 		$que = "insert into users (userName,pswd,autho) values ('".$_POST['userName']."','".$_POST['password']."','".$_POST['authority']."');";
 		$connect->query($que);
+		$id = "select userId from users where userName = '".$_POST['userName']."' and pswd = '".$_POST['password']."';";
+		$res = $connect->query($id);
+		$id = $res->fetch_assoc();
 		$connect->close(); 
 		echo "<script type='text/javascript'> alert(\"Account successfully created\"); </script>";
 		session_start();
-		$_SESSION['user'] = $_POST['userName'];
+		$_SESSION['userType'] = $_POST['authority'];
+		$_SESSION['userName'] = $_POST['userName'];
+		$_SESSION['userId'] = $id['userId'];
 		header("location:welcomePage.php");
 	}
 ?>

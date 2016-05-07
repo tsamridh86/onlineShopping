@@ -29,13 +29,13 @@
 <div style='position: absolute; top : 10px; right: 10px;'>
 <?php
 	error_reporting(0);
-	if(!$_SESSION['user'])
+	if(!$_SESSION['userType'])
 		echo "
 			<a class='login' href= 'SignUp.php'>Sign Up | </a>
 			<a class='login' href = 'LoginPage.php'>Login</a>";
 	else 
 	{
-		echo "<a class='login' href= #>Welcome ".$_SESSION['user']."</a>";
+		echo "<a class='login' href= #>Welcome ".$_SESSION['userName']."</a>";
 		echo "<a class='login' href= 'NLI.php'> | Logout</a>";
 
 	}
