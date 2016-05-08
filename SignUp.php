@@ -28,7 +28,12 @@
 		$_SESSION['userType'] = $_POST['authority'];
 		$_SESSION['userName'] = $_POST['userName'];
 		$_SESSION['userId'] = $id['userId'];
-		header("location:welcomePage.php");
+		if($_POST['authority'] == 'C')
+			header("location:welcomePage.php");
+		else if ($_POST['authority'] == 'A')
+			header("location:adminPage.php");
+		else if ($_POST['authority'] == 'S')
+			header("location:sellerPage.php");
 	}
 ?>
 
