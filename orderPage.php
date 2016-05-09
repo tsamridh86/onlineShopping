@@ -57,6 +57,7 @@
 		echo "<p> Item Name : ".$row['itemName']."</p>";
 		echo "<p> Price  : ".$row['price']."</p>";
 		echo "<p> Category : ".$row['category']."</p>";
+		echo "<p> Quantity : <input type = number name = 'quantity' > </p>";
 		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
 		echo "</div>";
 		echo "</form>";

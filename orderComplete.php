@@ -1,7 +1,7 @@
 
 <?php
 	session_start();
-	if(!empty($_SESSION['userType']) && $_SESSION['userType'] == 'C' && !empty($_POST['itemId']))
+	if(!empty($_SESSION['userType']) && $_SESSION['userType'] == 'C' && !empty($_POST['itemId']) && !empty($_POST['quantity']))
 	{
 		//connect to the database & stuff
 		$connect = mysqli_connect("localhost","root","");
@@ -16,12 +16,12 @@
 
 
 		//create the table order if it does not exists, all the orders are being saved into the table:
-		// orders ( orderId int, userId int , itemId int ) , foreign keys will be used, obviously to maintain the consistency of the database
-		$que = "create table if not exists orders ( orderId int primary key auto_increment, custId int references users(userId) , itemId int references items(itemId));";
+		// orders ( orderId int, userId int , itemId int , quantity int ) , foreign keys will be used, obviously to maintain the consistency of the database
+		$que = "create table if not exists orders ( orderId int primary key auto_increment, custId int references users(userId) , itemId int references items(itemId), quantity int );";
 		$connect->query($que);
 		
 		//to finally insert the item to the database
-		$order = "insert into orders (custId,itemId) values (".$_SESSION['userId'].",".$_POST['itemId'].");";
+		$order = "insert into orders (custId,itemId,quantity) values (".$_SESSION['userId'].",".$_POST['itemId'].",".$_POST['quantity'].");";
 		$connect->query($order);
 		$connect->close();
 		echo "You have successfully ordered your item. <a href = 'welcomePage.php'> Click here </a> to shop more.";
