@@ -17,8 +17,8 @@
 	 & for a logged in user there will be a logout option -->
 <div style='position: absolute; top : 10px; right: 10px;'>
 <?php
-	
-	if(!$_SESSION['userType'])
+	session_start();
+	if(empty($_SESSION['userType']))
 		echo "
 			<a class='login' href= 'SignUp.php'>Sign Up | </a>
 			<a class='login' href = 'LoginPage.php'>Login</a>";
@@ -47,13 +47,20 @@
 	$connect->query($que);
 	$que = "select * from items where itemName like  '%".$item."%';";
 	$result = $connect->query($que);
+
+	//a form is needed to change pages with the data intact
 	echo "<form method = get action = 'orderPage.php'>";
 	while($row = $result->fetch_assoc())
 	{
-		$locs = $row['imgLoc'];		//since the array name has '' the things got coomplex
+		$locs = $row['imgLoc'];		//since the array name has '' the things got complex
+		
+		//we only have the seller id of the person, this query is used to display it's actual name.
 		$que = "select userName from users where userId = ".$row['sellerId'].";";
 		$sellerName = $connect->query($que);
 		$sellerName = $sellerName->fetch_assoc();
+
+		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
+
 		echo "<div style='position: relative; height : 250px; width : 90%; top: 30px; left : 10 px; border:2px solid black; margin: 10px;'>";
 		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
 		echo "<img src = '$locs' height = 200 px width = 200px align = left>";
@@ -67,6 +74,6 @@
 		echo "</div>";
 		echo "</div>";
 	}
-	echo "</form>";
+	echo "</form>";	//just incase you were wondering the form has to be closed, I opened one before this loop
 	$connect->close();
 ?>
