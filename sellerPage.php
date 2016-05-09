@@ -1,4 +1,10 @@
+<!DOCTYPE html>
+<head>
+	<link rel="stylesheet" href="welcomePage.css">
+</head>
+
 <!--
+The instructions above are for the css of the logout options, they need to be modified.
 This page is exclusive to the seller only, i will add the extension to redirect the page if the person using is not a seller
 Using the relation :
 item ( sellerId int , itemName varchar(50), itemId int primary key, price int , imgLoc varchar(50))
@@ -20,6 +26,8 @@ item ( sellerId int , itemName varchar(50), itemId int primary key, price int , 
 		$file_temp = $_FILES['image']['tmp_name'];
 		$file_name = $_FILES['image']['name'];
 		move_uploaded_file($file_temp,"images/".$file_name);
+
+		//insert into the table
 		$ins = "insert into items (itemName,sellerId,price,category,imgLoc) values ('".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$_POST['category']."','"."images/".$file_name."');";
 		$connect->query($ins);
 		$connect->close();

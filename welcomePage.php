@@ -10,14 +10,14 @@
 
 <!-- for the search bar -->
 <div style="position: absolute; top : 10px; right:400px;">
-	<form method="get" action=""> 
+	<form method="get" action="search.php"> 
 		<table cellpadding="0px" cellspacing="0px"> 
 			<tr> 
 			<td style="border-style:solid none solid solid;border-color:#4B7B9F;border-width:1px;">
-				<input type="text" name="zoom_query" style="width:800px; border:0px solid; height:40px; padding:0px 3px; position:relative; font-size: 25px;">
+				<input type="text" name="query" style="width:800px; border:0px solid; height:40px; padding:0px 3px; position:relative; font-size: 25px;">
 			</td>
 			<td style="border-style:solid;border-color:#4B7B9F;border-width:1px;"> 
-				<input type="submit" value="" style="border-style: none; background: url('magnifyingGlass.png') no-repeat; width: 40px; height: 40px; background-size: 100% 100%;">
+				<input type="submit" value="submit" style="border-style: none; background: url('magnifyingGlass.png') no-repeat; width: 40px; height: 40px; background-size: 100% 100%;">
 			</td>
 			</tr>
 		</table>
