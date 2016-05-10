@@ -1,3 +1,10 @@
+<head>
+<style>
+ p {font-family: sans-serif;}
+</style>
+</head>
+
+
 <!-- Login tab will only be displayed if there is no user logged in.
  & for a logged in user there will be a logout option -->
 <div style='position: absolute; top : 10px; right: 10px;'>
@@ -56,11 +63,29 @@
 		echo "<p> Sold By  : ".$sellerName['userName']."</p>";
 		echo "<p> Item Name : ".$row['itemName']."</p>";
 		echo "<p> Price  : ".$row['price']."</p>";
+		echo "<p> Color : ".$row['color']."</p>";
+		echo "<p> Shape : ".$row['shape']."</p>";
 		echo "<p> Category : ".$row['category']."</p>";
 		echo "<p> Quantity : <input type = number name = 'quantity' > </p>";
 		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
 		echo "</div>";
+		/*
+		//This section is for the bidding, remove this from the comments to activate it.
 		echo "</form>";
+		echo "	<div style ='position:absolute; top : 350px; left : 550px;'>
+				<p> Bid a price for this item.</p>
+				<form method = get action = 'orderPage.php'>
+				<input type = hidden value = ".$_GET['itemId']." name = itemId>
+				<input type = number name = newPrice>
+				<input type = submit value = Bid>
+				";
+		echo "</form></div>";
+		if(!empty($_POST['newPrice']))
+		{
+			$que = "update items set price = ".$_POST['newPrice']." where itemid = ".$_GET['itemId'].";";
+			$connect->query($que);
+		}
+		*/
 		$connect->close();
 	}
 

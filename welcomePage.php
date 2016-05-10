@@ -56,8 +56,8 @@
 	<ul>
 		<li><a href="#">Men</a></li>
 		<li><a href="#">Women</a>	</li>
-		<li><a href="#">Electronics</a></li>
-		<li><a href="#">Books & Media</a></li>
-		<li><a href="#">Home & Furniture</a></li>
+		<li><a href="#">Kids</a></li>
+		<li><a href="#">Sunglasses</a></li>
+		<li><a href="#">Antiques</a></li>
 	</ul>
 </div>
