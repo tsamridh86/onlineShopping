@@ -17,7 +17,7 @@
 
 		//create the table order if it does not exists, all the orders are being saved into the table:
 		// orders ( orderId int, userId int , itemId int , quantity int ) , foreign keys will be used, obviously to maintain the consistency of the database
-		$que = "create table if not exists orders ( orderId int primary key auto_increment, custId int references users(userId) , itemId int references items(itemId), quantity int );";
+		$que = "create table if not exists orders ( orderId int primary key auto_increment, custId int references users(userId) , itemId int references items(itemId) on delete set null, quantity int );";
 		$connect->query($que);
 		
 		//to finally insert the item to the database
