@@ -76,6 +76,7 @@
 		</tr>
 		<tr>
 			<td><input type="submit" value="Sign Up" /></td>
+			<td><a href="welcomePage.php">Cancel</a></td>
 		</tr>		
 	</table>
 

@@ -57,6 +57,7 @@ if (!empty($_POST['userName']) && !empty($_POST['password']))
 		</tr>
 		<tr>
 			<td><input type="submit" value="Log In" /></td>
+			<td><a href="welcomePage.php">Cancel</a></td>
 		</tr>
 	</table>
 </form>
