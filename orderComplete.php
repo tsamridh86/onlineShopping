@@ -1,3 +1,6 @@
+<head>
+<link rel="stylesheet" href="welcomePage.css">
+</head>
 
 <?php
 	session_start();

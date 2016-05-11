@@ -1,5 +1,6 @@
 <head>
 <style>
+<link rel="stylesheet" href="welcomePage.css">
  p {font-family: sans-serif;}
 </style>
 </head>
