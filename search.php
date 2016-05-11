@@ -33,10 +33,8 @@
 <?php
 	/*
 	The user has entered the item name that s/he requires, so search for it & display them accordingly
+	the cat is used when the user uses the navigational bar instead, it is given a different name than ategory because it can be confused with the radio button that is available in this page
 	*/
-if (!empty($_GET['query']))
-	{
-	$item = $_GET['query'];
 	//connect to the database & all the things we have been thru lol
 	$connect = mysqli_connect("localhost","root","");
 	$dbstart = "create database if not exists shops;";
@@ -46,16 +44,32 @@ if (!empty($_GET['query']))
 	$connect->query($que);
 	
 
-
-	$que = "select * from items where itemName like  '%".$item."%'";
+	//searching part here
+	$que = "select * from items ";
+	//add where conditions, if only there are constraints
+	if(!empty($_GET['query']) || !empty($_GET['shape']) || !empty($_GET['color'])|| !empty($_GET['category']) || !empty($_GET['cat']))
+		$que = $que."where ";
+	if(!empty($_GET['query']))
+		$que = $que."itemName like '%".$_GET['query']."%' and ";
 	if(!empty($_GET['shape']))
-		$que = $que."and shape = '".$_GET['shape']."'";
+		$que = $que."shape = '".$_GET['shape']."' and ";
+	if(!empty($_GET['color']))
+		$que = $que."color = '".$_GET['color']."' and ";
+	if(!empty($_GET['category']))
+		$que = $que."category = '".$_GET['category']."' and ";
+	if(!empty($_GET['cat']))
+		$que = $que."category = '".$_GET['cat']."' and ";		 
+
+	// Now that the query has been made, wrench off the unnessecary and that is hanging behind, note that there are 4 characters , and  the space, use substr to wrench it off
+	$que = substr($que,0,-4);
+
+	//add the semicolon bro
+	$que = $que.";";
 	$result = $connect->query($que);
 
 	echo "	<form method = get action = 'search.php'>
-			<div style ='position:relative; top : 30px; left : 10px; border: 2px solid black; margin : 10px; width:270px; '>
-			<input name = 'query' type = hidden value = ".$item.">
-			Enter the category of the item.<br><br>
+			<div style ='position:relative; top : 30px; left : 10px; border: 2px solid black; margin : 10px; width:270px; height : 80%; scrollable:yes; padding : 3px;'>
+			Enter the shape of the item.<br><br>
 		";
 
 	/*
@@ -88,6 +102,7 @@ if (!empty($_GET['query']))
 			</div>
 			</form>";		
 
+	echo "<div style='scrollable : yes; position: absolute; top: 30px; left: 300px; height: 80%; width: 70%;'>";
 	//a form is needed to change pages with the data intact
 	echo "<form method = get action = 'orderPage.php'>";
 	while($row = $result->fetch_assoc())
@@ -99,7 +114,7 @@ if (!empty($_GET['query']))
 		$sellerName = $connect->query($que);
 		$sellerName = $sellerName->fetch_assoc();
 		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
-		echo "<div style='scrollable : yes; position: absolute; top: 30px; left: 300px; height: 80%; width: 70%;'>";
+		
 		echo "<div style='position: relative; height : 270px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
 		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
 		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
@@ -114,10 +129,9 @@ if (!empty($_GET['query']))
 		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
 		echo "</div>";
 		echo "</div>";
-		echo "</div>";
-
 	}
-	echo "</form>";	//just incase you were wondering the form has to be closed, I opened one before this loop
+	echo "</form>";	//just incase you were wondering which form has to be closed, I opened one before this loop
+	echo "</div>";
 	$connect->close();
-}	
+
 ?>

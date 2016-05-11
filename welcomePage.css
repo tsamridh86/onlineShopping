@@ -28,7 +28,7 @@ li {
     height: 50px;
 	
 }
-li a {
+li button {
 	display:block;
 	width:250px;
 	height: 50px;
@@ -38,12 +38,12 @@ li a {
 	color: white;
 	text-decoration:none;
 	background: gray;
-	/*border-radius:25px;*/
+	border-radius:25px;
 }
 
 /*Hover state for top level links*/
-li:hover a {
+li:hover button {
 	background: orange;
-	/*border-radius:25px;*/
+	border-radius:25px;
 	
 }

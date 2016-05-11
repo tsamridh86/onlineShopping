@@ -17,7 +17,7 @@
 				<input type="text" name="query" style="width:800px; border:0px solid; height:40px; padding:0px 3px; position:relative; font-size: 25px;">
 			</td>
 			<td style="border-style:solid;border-color:#4B7B9F;border-width:1px;"> 
-				<input type="submit" value="submit" style="border-style: none; background: url('magnifyingGlass.png') no-repeat; width: 40px; height: 40px; background-size: 100% 100%;">
+				<input type="submit" value="" style="border-style: none; background: url('magnifyingGlass.png') no-repeat; width: 40px; height: 40px; background-size: 100% 100%;">
 			</td>
 			</tr>
 		</table>
@@ -53,11 +53,13 @@
 
 <!-- This div id for the navigational bar-->
 <div style="position: relative; top: 70px; left: 50px;">
+	<form method="get" action = "search.php">
 	<ul>
-		<li><a href="#">Men</a></li>
-		<li><a href="#">Women</a>	</li>
-		<li><a href="#">Kids</a></li>
-		<li><a href="#">Sunglasses</a></li>
-		<li><a href="#">Antiques</a></li>
+		<li><button type="submit" name = "cat" value="men"> Men </button></li>
+		<li><button type="submit" name = "cat" value="women">Women</button>	</li>
+		<li><button type="submit" name = "cat" value="kids">Kids</button></li>
+		<li><button type="submit" name = "cat" value="sunglasses">Sunglasses</button></li>
+		<li><button type="submit" name = "cat" value="antique">Antiques</button></li>
 	</ul>
+	</form>
 </div>
