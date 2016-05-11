@@ -28,17 +28,18 @@
 	 & for a logged in user there will be a logout option -->
 <div style='position: absolute; top : 10px; right: 10px;'>
 <?php
-	error_reporting(0);
-	if(!$_SESSION['userType'])
+	
+	if(empty($_SESSION['userType']))
 		echo "
 			<a class='login' href= 'SignUp.php'>Sign Up | </a>
 			<a class='login' href = 'LoginPage.php'>Login</a>";
-	else 
+	else if($_SESSION['userType']=='C')
 	{
 		echo "<a class='login' href= #>Welcome ".$_SESSION['userName']."</a>";
 		echo "<a class='login' href= 'NLI.php'> | Logout</a>";
 
 	}
+	else if($_SESSION['userType']=='S') header("location:sellerPage.php");
 
 	
 ?>

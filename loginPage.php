@@ -39,7 +39,7 @@ if (!empty($_POST['userName']) && !empty($_POST['password']))
 	}
 	else
 	{
-		header("location:IVL.php");
+		echo "Sorry, you are not a registered user. <a href = 'signUp.php'>Click here</a> to sign up & join us. :D";
 	}
 }
 ?>
@@ -48,15 +48,15 @@ if (!empty($_POST['userName']) && !empty($_POST['password']))
 <form action = "loginPage.php" method = "post">
 	<table>
 		<tr>
-			<td>Enter your userName : </td>
+			<td>Enter your User Name : </td>
 			<td><input type = "text" name = "userName"></td>
 		</tr>
 		<tr>
-			<td>Enter your password : </td>
+			<td>Enter your Password : </td>
 			<td><input type = "password" name = "password"></td>
 		</tr>
 		<tr>
-			<td><input type="submit" value="submit" /></td>
+			<td><input type="submit" value="Log In" /></td>
 		</tr>
 	</table>
 </form>

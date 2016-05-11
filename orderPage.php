@@ -28,7 +28,8 @@
 	
 	if(empty($_SESSION['userType']))
 		echo "You must be a customer to buy items, please sign up.";
-	else if (!empty($_SESSION['userType']) && $_SESSION['userType'] == 'C' && !empty($_GET['itemId']))
+	else if ($_SESSION['userType'] == 'S') header("location:sellerPage.php");
+	else if ($_SESSION['userType'] == 'C' && !empty($_GET['itemId']))
 	{
 		//connect to the database & stuff
 		$connect = mysqli_connect("localhost","root","");

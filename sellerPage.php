@@ -4,7 +4,6 @@
 </head>
 
 <!--
-The instructions above are for the css of the logout options, they need to be modified.
 This page is exclusive to the seller only, i will add the extension to redirect the page if the person using is not a seller
 Using the relation :
 item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), category varchar(20), itemId int primary key, price int , imgLoc varchar(50))
@@ -12,10 +11,16 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 -->
 <?php
 	session_start();
-	//connect to the database & check whether as table exists for users
-	//some one may try login without the execution of the user table existence.
+	
+	//unauthorized users will be redirected from this page.
+	if(empty($_SESSION['userType'])) header("location:welcomePage.php");
+	if($_SESSION['userType']=='C') header("location:welcomePage.php");
+	
+	//this is to avoid the execution of adding into the database if everything is ready
 	if(!empty($_POST['itemName']) && !empty($_POST['price']) && is_uploaded_file($_FILES['image']['tmp_name']) && !empty($_POST['category'])&& !empty($_POST['shape']) && !empty($_POST['color']))
 	{
+		//connect to the database & check whether as table exists for users
+		//some one may try login without the execution of the user table existence.
 		$connect = mysqli_connect("localhost","root","");
 		$dbstart = "create database if not exists shops;";
 		$connect->query($dbstart);
