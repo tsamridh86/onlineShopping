@@ -98,6 +98,64 @@
 		echo "</div>";
 		}
 		echo "</div>";	
+
+		//This div is for all the users in the database
+		echo "
+				<div style = 'height: 300px; overflow:auto;'>
+				<p>All the users on the database:</p>
+				<table>
+					<tr>
+						<td>User Id</td>
+						<td>User Name </td>
+						<td>User Authority</td>
+					</tr>
+				";
+
+		while($row = $userData->fetch_assoc())
+		{
+			if($row['autho']=='A') $authority = "Administrator";
+			else if($row['autho']=='C') $authority = "Customer";
+			else if($row['autho']=='S') $authority = "Seller";
+			echo "<tr>
+					<td>".$row['userId']."</td>
+					<td>".$row['userName']."</td>
+					<td>".$authority."</td>
+					</tr>";
+		}
+		echo "</table></div>";
+
+		//This division is for all the orders in the database
+		//this ain't gonna be a easy one
+		$que = "select * from (items natural join orders) inner join users on custId = users.userId;";
+		$result = $connect->query($que);
+		
+		echo "
+				<div style = 'height: 300px; overflow:auto;'>
+				<p>All the users on the database:</p>
+				<table>
+					<tr>
+						<td>Order Id</td>
+						<td>Customer Name </td>
+						<td>Seller Name</td>
+						<td>Item Name</td>
+						<td>Quantity</td>
+					</tr>
+				";
+
+		while($row = $result->fetch_assoc())
+		{
+			$sellerName = "select userName from users where userId = ".$row['sellerId'];
+			$sellerName = $connect->query($sellerName);
+			$sellerName = $sellerName->fetch_assoc();
+			echo "	<tr>
+						<td>".$row['orderId']."</td>
+						<td>".$row['userName']."</td>
+						<td>".$sellerName['userName']."</td>
+						<td>".$row['itemName']."</td>
+						<td>".$row['quantity']."</td>
+				 	</tr>	";
+		}
+		echo "</table></div>";
 	}
 ?>
 
