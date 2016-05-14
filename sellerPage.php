@@ -121,13 +121,8 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 <?php
 	if(!empty($_GET['toDelete']))
 	{
-		$connect = mysqli_connect("localhost","root","");
-		$dbstart = "create database if not exists shops;";
-		$connect->query($dbstart);
-		mysqli_select_db($connect , "shops");
-		$que = "create table if not exists items (itemId int primary key auto_increment, itemName varchar (50) , sellerId int references users(userId) , price int , imgLoc varchar(50),category varchar(20),shape varchar(20),color varchar(20));";
-		$connect->query($que);
-
+		require 'config.php';
+		
 		//Now to actually delete the item from the items table
 		$que = "delete from items where itemId = ".$_GET['toDelete'].";";
 		$connect->query($que);
