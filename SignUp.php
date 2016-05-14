@@ -2,20 +2,7 @@
 	//This page redirects to itself, so, the database actions will take place if & only if all the parameters are sent.
 	if (!empty($_POST['userName']) && !empty($_POST['password']) && !empty($_POST['repassword']) && $_POST['password']==$_POST['repassword'] && !empty($_POST['authority']))
 	{
-		//connect to the server
-		$connect = mysqli_connect("localhost","root","");
-		
-		//create the database if it does not exists & login ito it
-		$dbstart = "create database if not exists shops;";
-		$connect->query($dbstart);
-		mysqli_select_db($connect , "shops");
-
-		/*	create table if it does not exists & insert the users
-			users (userId int primary key, userName varchar(20), pswd varchar(20), autho char(1))
-		*/
-
-		$que = "create table if not exists users ( userId int primary key auto_increment, userName varchar(20), pswd varchar(20), autho char(1));";
-		$connect->query($que);
+		require 'config.php';
 
 		//make sure that same userName does not exists, & if it does, simply warn the user.
 		$test = "select userName from users";

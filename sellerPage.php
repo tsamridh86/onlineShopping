@@ -104,12 +104,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	<option value = 'none'>--Select an item to delete--</option>
 	<?php
 		//gotta reconnect to the database, because this section is optional, & hence may not be used, when unused the connectivity remains disconnect so no risking here
-		$connect = mysqli_connect("localhost","root","");
-		$dbstart = "create database if not exists shops;";
-		$connect->query($dbstart);
-		mysqli_select_db($connect , "shops");
-		$que = "create table if not exists items (itemId int primary key auto_increment, itemName varchar (50) , sellerId int references users(userId) , price int , imgLoc varchar(50),category varchar(20),shape varchar(20),color varchar(20));";
-		$connect->query($que);
+		require 'config.php';
 
 		// now, to actually display the things inside here to the seller
 		$que = "select itemId, itemName from items where sellerId =".$_SESSION['userId'].";";

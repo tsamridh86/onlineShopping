@@ -1,14 +1,9 @@
 <?php
 if (!empty($_POST['userName']) && !empty($_POST['password']))
 {
-	//connect to the database & check whether as table exists for users
-	//some one may try login without the execution of the user table existence.
-	$connect = mysqli_connect("localhost","root","");
-	$dbstart = "create database if not exists shops;";
-	$connect->query($dbstart);
-	mysqli_select_db($connect , "shops");
-	$que = "create table if not exists users ( userId int primary key auto_increment, userName varchar(20), pswd varchar(20), autho char(1));";
-	$connect->query($que);
+	
+	require 'config.php';
+
 	//find whether the user is actually there or not
 	$que = "select userId , userName , autho from users where userName = '".$_POST['userName']."' and pswd = '".$_POST['password']."';";
 	$result = $connect->query($que);

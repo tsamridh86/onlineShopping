@@ -33,15 +33,7 @@
 	else if ($_SESSION['userType'] == 'C' && !empty($_GET['itemId']))
 	{
 		//connect to the database & stuff
-		$connect = mysqli_connect("localhost","root","");
-		$dbstart = "create database if not exists shops;";
-		$connect->query($dbstart);
-		mysqli_select_db($connect , "shops");
-		
-
-		//create the table of items if it does not exists, no need to worry about the users here, because if there are no users, it will show that you have to be a customer to order items.
-		$que = "create table if not exists items (itemId int primary key auto_increment, itemName varchar (50) , sellerId int references users(userId) , price int , imgLoc varchar(50),category varchar(25));";
-		$connect->query($que);
+		require 'config.php';
 		
 
 

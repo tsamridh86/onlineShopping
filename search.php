@@ -37,12 +37,7 @@
 	the cat is used when the user uses the navigational bar instead, it is given a different name than ategory because it can be confused with the radio button that is available in this page
 	*/
 	//connect to the database & all the things we have been thru lol
-	$connect = mysqli_connect("localhost","root","");
-	$dbstart = "create database if not exists shops;";
-	$connect->query($dbstart);
-	mysqli_select_db($connect , "shops");
-	$que = "create table if not exists items (itemId int primary key auto_increment, itemName varchar (50) , sellerId int references users(userId) , price int , imgLoc varchar(50),category varchar(25));";
-	$connect->query($que);
+	require 'config.php';
 	
 
 	//searching part here

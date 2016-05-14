@@ -18,22 +18,8 @@
 		header("location:sellerPage.php");
 	else
 	{
-		//connect to the database & stuff
-		$connect = mysqli_connect("localhost","root","");
-		$dbstart = "create database if not exists shops;";
-		$connect->query($dbstart);
-		mysqli_select_db($connect , "shops");
-
-		//create the table of items, if it does not exists
-		$que = "create table if not exists items (itemId int primary key auto_increment, itemName varchar (50) , sellerId int references users(userId) , price int , imgLoc varchar(50),category varchar(25));";
-		$connect->query($que);
-
-		//create the table of orders, if it does not exists
-		$que = "create table if not exists orders ( orderId int primary key auto_increment, custId int references users(userId) , itemId int references items(itemId) on delete set null, quantity int );";
-		$connect->query($que);
-
-		//table of users exists, otherwise you wouldn't be here lol, so no need to create
-
+		require 'config.php';
+		
 		//to show stats, count the items on page
 		$userData = "select * from users;";
 		$itemData = "select * from items;";
