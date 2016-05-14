@@ -33,13 +33,15 @@
 		echo "
 			<a class='login' href= 'SignUp.php'>Sign Up | </a>
 			<a class='login' href = 'LoginPage.php'>Login</a>";
-	else if($_SESSION['userType']=='C')
+	else if($_SESSION['userType']=='S') header("location:sellerPage.php")
+
+	else
 	{
-		echo "<a class='login' href= #>Welcome ".$_SESSION['userName']."</a>";
-		echo "<a class='login' href= 'NLI.php'> | Logout</a>";
+		echo "<a class='login' href= #>Welcome ".$_SESSION['userName']."</a>
+		      <a class='login' href= 'NLI.php'> | Logout</a>";
 
 	}
-	else if($_SESSION['userType']=='S') header("location:sellerPage.php");
+	
 
 	
 ?>

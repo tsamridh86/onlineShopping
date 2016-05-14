@@ -64,7 +64,7 @@
 	$result = $connect->query($que);
 
 	echo "	<form method = get action = 'search.php'>
-			<div style ='position:relative; top : 30px; left : 10px; border: 2px solid black; margin : 10px; width:270px; height : 80%; scrollable:yes; padding : 3px;'>
+			<div style ='position:relative; top : 30px; left : 10px; border: 2px solid black; margin : 10px; width:270px; height : 80%; overflow:auto; padding : 3px;'>
 			Enter the shape of the item.<br><br>
 		";
 
@@ -98,7 +98,7 @@
 			</div>
 			</form>";		
 
-	echo "<div style='scrollable : yes; position: absolute; top: 30px; left: 300px; height: 80%; width: 70%;'>";
+	echo "<div style='overflow : auto; position: absolute; top: 30px; left: 300px; height: 80%; width: 70%;'>";
 	//a form is needed to change pages with the data intact
 	echo "<form method = get action = 'orderPage.php'>";
 	while($row = $result->fetch_assoc())

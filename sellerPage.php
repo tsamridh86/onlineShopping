@@ -122,7 +122,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	if(!empty($_GET['toDelete']))
 	{
 		require 'config.php';
-		
+
 		//Now to actually delete the item from the items table
 		$que = "delete from items where itemId = ".$_GET['toDelete'].";";
 		$connect->query($que);
@@ -141,18 +141,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	<?php
 
 		//connect to the database and stuff
-		$connect = mysqli_connect("localhost","root","");
-		$dbstart = "create database if not exists shops;";
-		$connect->query($dbstart);
-		mysqli_select_db($connect , "shops");
-		
-		//create the table items if it does not exists lol
-		$que = "create table if not exists items (itemId int primary key auto_increment, itemName varchar (50) , sellerId int references users(userId) , price int , imgLoc varchar(50),category varchar(20),shape varchar(20),color varchar(20));";
-		$connect->query($que);
-
-		//create the table of orders if they don't exists
-		$que = "create table if not exists orders ( orderId int primary key auto_increment, custId int references users(userId) , itemId int references items(itemId) on delete set null, quantity int );";
-		$connect->query($que);
+		require 'config.php';
 
 		//the objective here is to display what items needs to delievered to what person in what quantity
 		//so using the natural join between items, orders and users, we can obtain all of this

@@ -34,8 +34,6 @@
 	{
 		//connect to the database & stuff
 		require 'config.php';
-		
-
 
 		//get all the data on the item.
 		$que = "select * from items where itemId =".$_GET['itemId'].";";
