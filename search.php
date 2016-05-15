@@ -98,7 +98,7 @@
 			</div>
 			</form>";		
 
-	echo "<div style='overflow : auto; position: absolute; top: 30px; left: 300px; height: 80%; width: 70%;'>";
+	echo "<div style='overflow : auto; position: absolute; top: 50px; left: 300px; height: 80%; width: 70%;'>";
 	//a form is needed to change pages with the data intact
 	echo "<form method = get action = 'orderPage.php'>";
 	while($row = $result->fetch_assoc())

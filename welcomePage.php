@@ -39,7 +39,6 @@
 	{
 		echo "<a class='login' href= #>Welcome ".$_SESSION['userName']."</a>
 		      <a class='login' href= 'NLI.php'> | Logout</a>";
-
 	}
 	
 
