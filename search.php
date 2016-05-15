@@ -43,7 +43,7 @@
 	//searching part here
 	$que = "select * from items ";
 	//add where conditions, if only there are constraints
-	if(!empty($_GET['query']) || !empty($_GET['shape']) || !empty($_GET['color'])|| !empty($_GET['category']) || !empty($_GET['cat']))
+	if(!empty($_GET['query']) || !empty($_GET['shape']) || !empty($_GET['color'])|| !empty($_GET['category']) || !empty($_GET['cat']) || !empty($_GET['seller']))
 		$que = $que."where ";
 	if(!empty($_GET['query']))
 		$que = $que."itemName like '%".$_GET['query']."%' and ";
@@ -54,7 +54,9 @@
 	if(!empty($_GET['category']))
 		$que = $que."category = '".$_GET['category']."' and ";
 	if(!empty($_GET['cat']))
-		$que = $que."category = '".$_GET['cat']."' and ";		 
+		$que = $que."category = '".$_GET['cat']."' and ";
+	if(!empty($_GET['seller']))
+		$que = $que."sellerid = ".$_GET['seller']." and ";			 
 
 	// Now that the query has been made, wrench off the unnessecary and that is hanging behind, note that there are 4 characters , and  the space, use substr to wrench it off
 	$que = substr($que,0,-4);
@@ -79,20 +81,28 @@
 	$sidebar = $connect->query($sidebar);	
 	while($prop = $sidebar->fetch_assoc())
 			echo "<input name = 'shape' type = 'radio' value = ".$prop['shape'].">".$prop['shape']."<br><br>";
-	echo "	Enter the color of the item:<br><br>";
+	
 
 	//color of items
+	echo "	Enter the color of the item:<br><br>";
 	$sidebar = "select color from items;";
 	$sidebar = $connect->query($sidebar);
 	while($prop = $sidebar->fetch_assoc())
 			echo "<input name = 'color' type = 'radio' value = ".$prop['color'].">".$prop['color']."<br><br>";
-	echo "	Enter the category of the item:<br><br>";
-
+	
 	//category of item
+	echo "	Enter the category of the item:<br><br>";
 	$sidebar = "select category from items;";
 	$sidebar = $connect->query($sidebar);
 	while($prop = $sidebar->fetch_assoc())
 			echo "<input name = 'category' type = 'radio' value = ".$prop['category'].">".$prop['category']."<br><br>";	
+
+	//search by seller
+	echo "Enter the seller you want to buy from: <br><br>";	
+	$sidebar = "select distinct items.sellerid as sellid, users.userName as uname from items inner join users on users.userId = items.sellerId";
+	$sidebar = $connect->query($sidebar);
+	while ($prop = $sidebar->fetch_assoc())
+		echo "<input name = 'seller' type = 'radio' value = ".$prop['sellid'].">".$prop['uname']."<br><br>";
 	echo "
 			<input type = submit value = submit>
 			</div>
