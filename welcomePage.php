@@ -33,7 +33,7 @@
 		echo "
 			<a class='login' href= 'SignUp.php'>Sign Up | </a>
 			<a class='login' href = 'LoginPage.php'>Login</a>";
-	else if($_SESSION['userType']=='S') header("location:sellerPage.php")
+	else if($_SESSION['userType']=='S') header("location:sellerPage.php");
 
 	else
 	{
