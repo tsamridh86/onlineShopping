@@ -11,7 +11,7 @@
 <div style='position: absolute; top : 10px; right: 10px;'>
 <?php
 	session_start();
-	if(!$_SESSION['userType'])
+	if(empty($_SESSION['userType']))
 		echo "
 			<a class='login' href= 'SignUp.php'>Sign Up | </a>
 			<a class='login' href = 'LoginPage.php'>Login</a>";

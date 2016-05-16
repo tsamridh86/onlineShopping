@@ -65,3 +65,63 @@
 	</ul>
 	</form>
 </div>
+
+
+<div style='position: relative; top : 150px; left:10px; '>
+	<h1 style='font-family: georgia;'>Now Trending</h1>
+	<?php
+		//connect to the database & stuff
+		require 'config.php';
+		/*
+
+			Since, now trending item is the item that has been ordered maximum times by the customers,
+
+			the query select itemId , sum(quantity) as q from orders group by itemId,
+			returns the itemId and sum of it's quantity that has been ordered, hence,
+			group by has to be used, otherwise sql will blindly sum up quantity from the entire table,
+			group by itemId will sum up quantity from the orders table having the same item id,
+			this is nested inside next query
+
+			select * from items natural join (select itemId , sum(quantity) as q from orders group by itemId)x order by q desc;
+
+			this will join the table w.r.t. the itemId, & since it is ordered in descending order , the mosr ordered item will show up at the top
+			we use a simple counter in for loop, to display 3 top items only.
+		*/
+
+
+		$que = "select * from items natural join (select itemId , sum(quantity) as q from orders group by itemId)x order by q desc;";
+		$result = $connect->query($que);
+		$count = 0;
+		echo "<form method = get action = 'orderPage.php'>";
+		while ($row = $result->fetch_assoc() and $count < 3)
+		{
+			$count = $count + 1;
+			
+		$locs = $row['imgLoc'];		//since the array name has '' the things got complex
+	
+		//we only have the seller id of the person, this query is used to display it's actual name.
+		$sellerName = "select userName from users where userId = ".$row['sellerId'].";";
+		$sellerName = $connect->query($sellerName);
+		$sellerName = $sellerName->fetch_assoc();
+		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
+		
+		echo "<div style='position: relative; height : 270px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
+		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
+		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
+		echo "</div>";
+		echo "<div style='position: absolute; top: 10px; left: 270px;'>";
+		echo "<p> Sold By  : ".$sellerName['userName']."</p>";
+		echo "<p> Color : ".$row['color']."</p>";
+		echo "<p> Shape : ".$row['shape']."</p>";
+		echo "<p> Item Name : ".$row['itemName']."</p>";
+		echo "<p> Price  : ".$row['price']."</p>";
+		echo "<p> Category : ".$row['category']."</p>";
+		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
+		echo "</div>";
+		echo "</div>";
+			
+		}
+		echo "</form>";
+		$connect->close();
+	?>
+</div>

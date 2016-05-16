@@ -7,7 +7,7 @@
 
 	*/
 		//connect to the server
-		$connect = mysqli_connect("localhost","root","");
+		$connect = mysqli_connect("localhost","root","") or die ("Unable to connect to MySQL Sever.");
 		
 		//create the database if it does not exists & login ito it
 		$dbstart = "create database if not exists shops;";
