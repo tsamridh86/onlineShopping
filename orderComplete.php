@@ -12,8 +12,33 @@
 		//to finally insert the item to the database
 		$order = "insert into orders (custId,itemId,quantity) values (".$_SESSION['userId'].",".$_POST['itemId'].",".$_POST['quantity'].");";
 		$connect->query($order);
-		$connect->close();
+		
+		$itemData = "select itemName, price from items where itemId = ".$_POST['itemId'];
+		$itemData = $connect->query($itemData);
+		$itemData = $itemData->fetch_assoc();
+		echo "<table>
+				<th> Order Review : </th>
+					<tr>
+						<td> Item Name : </td>
+						<td>".$itemData['itemName']."</td>
+					</tr>
+					<tr>
+						<td> Quantity : </td>
+						<td>".$_POST['quantity']."</td>
+					</tr>
+					<tr>
+						<td> Price : </td>
+						<td>".$itemData['price']."</td>
+					</tr>
+					<tr>
+						<td> Grand total : </td>
+						<td>".($itemData['price']*$_POST['quantity'])."</td>
+
+					</tr>	
+				</table>
+				";
 		echo "You have successfully ordered your item. <a href = 'welcomePage.php'> Click here </a> to shop more.";
+		$connect->close();
 
 	}
 

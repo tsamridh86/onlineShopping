@@ -148,13 +148,15 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		//there is no need to create user table if not exists, you would not be in this page if you were not a seller lol
 
 		//this ain't gonna be a easy one
-		$que = "select userName, itemName , quantity from (items natural join orders) inner join users on custId = users.userId where sellerId =".$_SESSION['userId'].";";
+		$que = "select userName, itemName , quantity, price from (items natural join orders) inner join users on custId = users.userId where sellerId =".$_SESSION['userId'].";";
 		$result = $connect->query($que);
 		echo "<table width = 90% style = 'padding : 5px; margin : 5px;'>
 				<tr>
 					<td> Customer Name </td>
 					<td> Item to be delievered </td>
 					<td> Quantity </td>
+					<td> Rate </td>
+					<td> Grand total </td>
 				</tr>";
 		while($row = $result->fetch_assoc())
 		{
@@ -162,6 +164,8 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 						<td>".$row['userName']."</td>
 						<td>".$row['itemName']."</td>
 						<td>".$row['quantity']."</td>
+						<td>".$row['price']."</td>
+						<td>".($row['quantity']*$row['price'])."</td>
 				 	</tr>	";
 		}
 		echo "</table>";
