@@ -158,6 +158,8 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 					<td> Rate </td>
 					<td> Grand total </td>
 				</tr>";
+
+				// The value of grand total is not stored in database because it is a derived attribute & hence causes a wastage of space.
 		while($row = $result->fetch_assoc())
 		{
 			echo "	<tr>
