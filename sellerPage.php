@@ -21,15 +21,24 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	{
 		//connect to the database & check whether as table exists for users
 		//some one may try login without the execution of the user table existence.
-		$connect = mysqli_connect("localhost","root","");
-		$dbstart = "create database if not exists shops;";
-		$connect->query($dbstart);
-		mysqli_select_db($connect , "shops");
-		$que = "create table if not exists items (itemId int primary key auto_increment, itemName varchar (50) , sellerId int references users(userId) , price int , imgLoc varchar(50),category varchar(20),shape varchar(20),color varchar(20));";
-		$connect->query($que);
+		require 'config.php';
 		//import image to the server page
 		$file_temp = $_FILES['image']['tmp_name'];
 		$file_name = $_FILES['image']['name'];
+		
+		//if the same name of the file exists then rename it adding numbers to it
+		$i = 0 ;
+		while(file_exists("images/".$file_name))
+		{
+			if(!$i) //if($i ==0) this is used if there is only one copy
+			$file_name = substr($file_name,0,-4).$i.substr($file_name, -4);
+			else 	//this is used if there is more than one copy available 
+				$file_name = substr($file_name,0,-5).$i.substr($file_name, -4);
+			$i++;
+		}
+		$i = 0 ; 	//reset the value for i, since the loop has already run it's course.
+
+
 		move_uploaded_file($file_temp,"images/".$file_name);
 
 		//insert into the table
@@ -41,7 +50,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 
 <!-- This division is for the items that are going to be added to database -->
 <div style="position: relative; top: 10px; left: 10px; border: 2px solid black; width: 50%; margin: 10px; padding: 10px;">
-<form method = "post" action = "sellerPage.php" enctype="multipart/form-data">
+<form method = "post" action = "sellerPage.php" enctype="multipart/form-data">	<!-- enctype is for image transfer   -->
 <table style="padding: 10px;">
 	<th>Keep an item on sale</th>
 	<tr>
