@@ -43,7 +43,7 @@
 	//searching part here
 	$que = "select * from items ";
 	//add where conditions, if only there are constraints
-	if(!empty($_GET['query']) || !empty($_GET['shape']) || !empty($_GET['color'])|| !empty($_GET['category']) || !empty($_GET['cat']) || !empty($_GET['seller']))
+	if(!empty($_GET['query']) || !empty($_GET['shape']) || !empty($_GET['color'])|| !empty($_GET['category']) || !empty($_GET['cat']) || !empty($_GET['seller']) || !empty($_GET['type']))
 		$que = $que."where ";
 	if(!empty($_GET['query']))
 		$que = $que."itemName like '%".$_GET['query']."%' and ";
@@ -56,7 +56,9 @@
 	if(!empty($_GET['cat']))
 		$que = $que."category = '".$_GET['cat']."' and ";
 	if(!empty($_GET['seller']))
-		$que = $que."sellerid = ".$_GET['seller']." and ";			 
+		$que = $que."sellerid = ".$_GET['seller']." and ";
+	if(!empty($_GET['type']))
+		$que = $que."type = '".$_GET['type']."' and ";
 
 	// Now that the query has been made, wrench off the unnessecary and that is hanging behind, note that there are 4 characters , and  the space, use substr to wrench it off
 	$que = substr($que,0,-4);
@@ -103,6 +105,13 @@
 	$sidebar = $connect->query($sidebar);
 	while ($prop = $sidebar->fetch_assoc())
 		echo "<input name = 'seller' type = 'radio' value = ".$prop['sellid'].">".$prop['uname']."<br><br>";
+	
+	//search if the item is being sold or on bid
+	echo "Search for items on sale or bid<br><br>";
+	echo "<input name = 'type' type = 'radio' value = 'B'>Bidding Only<br><br>";
+	echo "<input name = 'type' type = 'radio' value = 'S'>For Sale<br><br>";
+
+	//final input button
 	echo "
 			<input type = submit value = submit>
 			</div>
@@ -121,7 +130,7 @@
 		$sellerName = $sellerName->fetch_assoc();
 		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
 		
-		echo "<div style='position: relative; height : 270px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
+		echo "<div style='position: relative; height : 300px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
 		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
 		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
 		echo "</div>";
@@ -132,7 +141,17 @@
 		echo "<p> Item Name : ".$row['itemName']."</p>";
 		echo "<p> Price  : ".$row['price']."</p>";
 		echo "<p> Category : ".$row['category']."</p>";
+		if($row['type']=='B')
+		{
+			$que = "select userName from items inner join users on items.custId = users.userId where itemId = ".$row['itemId'].";";
+			$custName = $connect->query($que);
+			$custName = $custName->fetch_assoc();
+			echo "<p> Latest Bidder : ".$custName['userName']."</p>";
+		}
+		if($row['type']=='S')
 		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
+		else
+			echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Bid</button>";
 		echo "</div>";
 		echo "</div>";
 	}

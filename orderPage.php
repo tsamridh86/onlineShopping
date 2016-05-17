@@ -59,26 +59,14 @@
 		echo "<p> Color : ".$row['color']."</p>";
 		echo "<p> Shape : ".$row['shape']."</p>";
 		echo "<p> Category : ".$row['category']."</p>";
+		if ($row['type']=='S')
 		echo "<p> Quantity : <input type = number name = 'quantity' > </p>";
+		else 
+			echo "<p> Bid a price for this item : <input type = 'number' name = 'quantity'></p>";
+		echo "<input type = hidden name = 'type' value = ".$row['type'].">";	//the type of the item must be sent discreetly
 		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
 		echo "</div>";
-		/*
-		//This section is for the bidding, remove this from the comments to activate it.
 		echo "</form>";
-		echo "	<div style ='position:absolute; top : 350px; left : 550px;'>
-				<p> Bid a price for this item.</p>
-				<form method = get action = 'orderPage.php'>
-				<input type = hidden value = ".$_GET['itemId']." name = itemId>
-				<input type = number name = newPrice>
-				<input type = submit value = Bid>
-				";
-		echo "</form></div>";
-		if(!empty($_POST['newPrice']))
-		{
-			$que = "update items set price = ".$_POST['newPrice']." where itemid = ".$_GET['itemId'].";";
-			$connect->query($que);
-		}
-		*/
 		$connect->close();
 	}
 

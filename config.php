@@ -23,13 +23,13 @@
 
 		/*
 			create table of item if it does not exists
-			items ( itemId int primary key, itemName varchar(50), sellerId int , price int , imgLoc varchar(50), category varchar(25), shape varchar(20));
+			items ( itemId int primary key, itemName varchar(50), sellerId int , price int , imgLoc varchar(50), category varchar(25), shape varchar(20),color(20));
 
 			there is a foreign key reference here, where item is the sub table & users is the supertable
 			key reference is of sellerId & userId
 			this reference has been made because, a seller also has to be a user in order to post an item, hence a user with an invalid id will not be allowed to be inside the database.
 		*/
-		$que = "create table if not exists items (itemId int primary key auto_increment, itemName varchar (50) , sellerId int references users(userId) , shape varchar (20),color varchar (30), price int , imgLoc varchar(50),category varchar(25));";
+		$que = "create table if not exists items (itemId int primary key auto_increment, itemName varchar (50) , sellerId int references users(userId) , shape varchar (20),color varchar (30), price int , imgLoc varchar(50),category varchar(25),type char(1),custId int default null);";
 		$connect->query($que);
 
 		/*

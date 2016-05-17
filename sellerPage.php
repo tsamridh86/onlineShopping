@@ -37,12 +37,14 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 			$i++;
 		}
 		$i = 0 ; 	//reset the value for i, since the loop has already run it's course.
+		move_uploaded_file($file_temp,"images/".$file_name);	//this uploads it into the server
 
-
-		move_uploaded_file($file_temp,"images/".$file_name);
+		//there are two submit buttons, that determines whether it is to be kept on Bidding or sale, so
+		if($_POST['type']=='Keep On Bidding') $type = 'B';
+		else $type = 'S';
 
 		//insert into the table
-		$ins = "insert into items (itemName,sellerId,price,category,shape,color,imgLoc) values ('".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$_POST['category']."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."');";
+		$ins = "insert into items (itemName,sellerId,price,category,shape,color,imgLoc,type) values ('".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$_POST['category']."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."');";
 		$connect->query($ins);
 		$connect->close();
 	}
@@ -96,7 +98,8 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		<td><input type = "file" name="image"/></td>
 	</tr>
 	<tr>
-		<td><input type = "submit" value = "Keep On Sale"></td>
+		<td><input type = "submit" name = 'type' value = "Keep On Sale"></td>
+		<td><input type = "submit" name = 'type' value = "Keep On Bidding"></td>
 	</tr>
 </table>
 </form>
@@ -156,10 +159,13 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		//so using the natural join between items, orders and users, we can obtain all of this
 		//there is no need to create user table if not exists, you would not be in this page if you were not a seller lol
 
+
+		//this is to only display the items that have been ordered
 		//this ain't gonna be a easy one
-		$que = "select userName, itemName , quantity, price from (items natural join orders) inner join users on custId = users.userId where sellerId =".$_SESSION['userId'].";";
+		$que = "select userName, itemName , quantity, price from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId where sellerId = 1 and type = 'S';";
 		$result = $connect->query($que);
 		echo "<table width = 90% style = 'padding : 5px; margin : 5px;'>
+				<th> Items to be delievered </th>
 				<tr>
 					<td> Customer Name </td>
 					<td> Item to be delievered </td>
@@ -177,6 +183,28 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 						<td>".$row['quantity']."</td>
 						<td>".$row['price']."</td>
 						<td>".($row['quantity']*$row['price'])."</td>
+				 	</tr>	";
+		}
+		echo "</table>";
+
+		//this is for the items that are for bidding
+		$que = "select items.price , users.userName , items.itemName from items inner join users on users.userId = items.custId where sellerId = ".$_SESSION['userId']." and type = 'B';";
+		$result = $connect->query($que);
+		echo "<table width = 90% style = 'padding : 5px; margin : 5px;'>
+				<th> Current bidding prices</th>
+				<tr>
+					<td> Customer Name </td>
+					<td> Item to be delievered </td>
+					<td> Current Price </td>
+				</tr>";
+
+				// The value of grand total is not stored in database because it is a derived attribute & hence causes a wastage of space.
+		while($row = $result->fetch_assoc())
+		{
+			echo "	<tr>
+						<td>".$row['userName']."</td>
+						<td>".$row['itemName']."</td>
+						<td>".$row['price']."</td>
 				 	</tr>	";
 		}
 		echo "</table>";

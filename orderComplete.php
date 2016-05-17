@@ -9,7 +9,10 @@
 		//connect to the database & stuff
 		require 'config.php';
 		
-		//to finally insert the item to the database
+
+		//to finally insert the item to the database if it is on sale:
+		if($_POST['type']=='S')
+		{
 		$order = "insert into orders (custId,itemId,quantity) values (".$_SESSION['userId'].",".$_POST['itemId'].",".$_POST['quantity'].");";
 		$connect->query($order);
 		
@@ -38,6 +41,31 @@
 				</table>
 				";
 		echo "You have successfully ordered your item. <a href = 'welcomePage.php'> Click here </a> to shop more.";
+		}
+
+		//if it was bid then display the new price & change the value in the items page instead.
+		else
+		{
+			$order = "update items set custId = ".$_SESSION['userId']." , price = ".$_POST['quantity']." where itemId = ".$_POST['itemId'].";";
+			$connect->query($order);
+			$itemData = "select itemName, price from items where itemId = ".$_POST['itemId'];
+			$itemData = $connect->query($itemData);
+			$itemData = $itemData->fetch_assoc();
+			echo "<table>
+					<th> Order Review : </th>
+						<tr>
+							<td> Item Name : </td>
+							<td>".$itemData['itemName']."</td>
+						</tr>
+						<tr>
+							<td> Price : </td>
+							<td>".$itemData['price']."</td>
+						</tr>
+					</table>
+					";
+				echo "You have bid your amount.<a href = 'welcomePage.php'> Click here </a> to shop more.";	
+			}
+
 		$connect->close();
 
 	}

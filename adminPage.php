@@ -67,19 +67,26 @@
 		$que = "select userName from users where userId = ".$row['sellerId'].";";
 		$sellerName = $connect->query($que);
 		$sellerName = $sellerName->fetch_assoc();
-		//this is to properly display inside a division for every item, (because this thing is in a while loop everyting is printed accordingly)
+		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
 		
-		echo "<div style='height : 270px; width : 70%; top: 30px; left : 10px;'>";
-		echo "<div style=' top: 10px; left: 10px; border:none;'>";
+		echo "<div style='position: relative; height : 300px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
+		echo "<div style='position: absolute; top: 10px; left: 10px;border:none;'>";
 		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
 		echo "</div>";
-		echo "<div style=' top: 10px; left: 270px; border:none;'>";
+		echo "<div style='position: absolute; top: 10px; left: 270px;border:none;'>";
 		echo "<p> Sold By  : ".$sellerName['userName']."</p>";
 		echo "<p> Color : ".$row['color']."</p>";
 		echo "<p> Shape : ".$row['shape']."</p>";
 		echo "<p> Item Name : ".$row['itemName']."</p>";
 		echo "<p> Price  : ".$row['price']."</p>";
 		echo "<p> Category : ".$row['category']."</p>";
+		if($row['type']=='B')
+		{
+			$que = "select userName from items inner join users on items.custId = users.userId where itemId = ".$row['itemId'].";";
+			$custName = $connect->query($que);
+			$custName = $custName->fetch_assoc();
+			echo "<p> Latest Bidder : ".$custName['userName']."</p>";
+		}
 		echo "</div>";
 		echo "</div>";
 		}
@@ -112,19 +119,21 @@
 
 		//This division is for all the orders in the database
 		//this ain't gonna be a easy one
-		$que = "select * from (items natural join orders) inner join users on custId = users.userId;";
+		$que = "select * from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId where type = 'S'";
 		$result = $connect->query($que);
 		
 		echo "
 				<div style = 'height: 300px; overflow:auto;'>
-				<p>All the users on the database:</p>
+				<p>All the orders on the database:</p>
 				<table>
 					<tr>
 						<td>Order Id</td>
 						<td>Customer Name </td>
 						<td>Seller Name</td>
 						<td>Item Name</td>
+						<td>Rate</td>
 						<td>Quantity</td>
+						<td>Grand total</td>
 					</tr>
 				";
 
@@ -138,10 +147,43 @@
 						<td>".$row['userName']."</td>
 						<td>".$sellerName['userName']."</td>
 						<td>".$row['itemName']."</td>
+						<td>".$row['price']."</td>
 						<td>".$row['quantity']."</td>
-				 	</tr>	";
+						<td>".($row['price']*$row['quantity'])."</td>
+						</tr>	";
 		}
 		echo "</table></div>";
+
+		//This div is for all the bids on the page
+		$que = "select items.price , users.userName , items.itemName, items.sellerId from items inner join users on users.userId = items.custId where type = 'B'";
+		$result = $connect->query($que);
+		echo "
+				<div style = 'height: 300px; overflow:auto;'>
+				<p>All the bidding on the database:</p>
+				<table>
+					<tr>
+						<td>Customer Name </td>
+						<td>Seller Name</td>
+						<td>Item Name</td>
+						<td>Latest Price</td>
+					</tr>
+				";
+		while($row = $result->fetch_assoc())
+		{
+			$que = "select userName from users where userId = ".$row['sellerId'].";";
+			$que = $connect->query($que);
+			$que = $que->fetch_assoc();
+			echo "	<tr>
+						<td>".$row['userName']."</td>
+						<td>".$que['userName']."</td>
+						<td>".$row['itemName']."</td>
+						<td>".$row['price']."</td>
+				 	</tr>	";
+		}
+		echo "</table>";
+
+
+		$connect->close();
 	}
 ?>
 
