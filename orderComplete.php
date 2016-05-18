@@ -46,6 +46,15 @@
 		//if it was bid then display the new price & change the value in the items page instead.
 		else
 		{
+			$check = "select price from items where itemId = ".$_POST['itemId'];
+			$check = $connect->query($check);
+			$check = $check->fetch_assoc();
+			if($check['price']> $_POST['quantity'])
+			{
+				echo "Your amount is too small for a bid. Please try again.";
+			}
+			else
+			{
 			$order = "update items set custId = ".$_SESSION['userId']." , price = ".$_POST['quantity']." where itemId = ".$_POST['itemId'].";";
 			$connect->query($order);
 			$itemData = "select itemName, price from items where itemId = ".$_POST['itemId'];
@@ -65,7 +74,7 @@
 					";
 				echo "You have bid your amount.<a href = 'welcomePage.php'> Click here </a> to shop more.";	
 			}
-
+		}
 		$connect->close();
 
 	}
