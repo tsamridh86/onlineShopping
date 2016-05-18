@@ -41,10 +41,7 @@
 	
 
 	//searching part here
-	$que = "select * from items ";
-	//add where conditions, if only there are constraints
-	if(!empty($_GET['query']) || !empty($_GET['shape']) || !empty($_GET['color'])|| !empty($_GET['category']) || !empty($_GET['cat']) || !empty($_GET['seller']) || !empty($_GET['type']))
-		$que = $que."where ";
+	$que = "select * from items where status = 'Y' and ";
 	if(!empty($_GET['query']))
 		$que = $que."itemName like '%".$_GET['query']."%' and ";
 	if(!empty($_GET['shape']))
@@ -79,7 +76,7 @@
 
 	*/
 	// This is to show the shape of items
-	$sidebar = "select shape from items;";
+	$sidebar = "select distinct shape from items where status = 'Y';";
 	$sidebar = $connect->query($sidebar);	
 	while($prop = $sidebar->fetch_assoc())
 			echo "<input name = 'shape' type = 'radio' value = ".$prop['shape'].">".$prop['shape']."<br><br>";
@@ -87,21 +84,21 @@
 
 	//color of items
 	echo "	Enter the color of the item:<br><br>";
-	$sidebar = "select color from items;";
+	$sidebar = "select distinct color from items where status = 'Y';";
 	$sidebar = $connect->query($sidebar);
 	while($prop = $sidebar->fetch_assoc())
 			echo "<input name = 'color' type = 'radio' value = ".$prop['color'].">".$prop['color']."<br><br>";
 	
 	//category of item
 	echo "	Enter the category of the item:<br><br>";
-	$sidebar = "select category from items;";
+	$sidebar = "select distinct category from items where status = 'Y';";
 	$sidebar = $connect->query($sidebar);
 	while($prop = $sidebar->fetch_assoc())
 			echo "<input name = 'category' type = 'radio' value = ".$prop['category'].">".$prop['category']."<br><br>";	
 
 	//search by seller
 	echo "Enter the seller you want to buy from: <br><br>";	
-	$sidebar = "select distinct items.sellerid as sellid, users.userName as uname from items inner join users on users.userId = items.sellerId";
+	$sidebar = "select distinct items.sellerid as sellid, users.userName as uname from items inner join users on users.userId = items.sellerId where items.status = 'Y'";
 	$sidebar = $connect->query($sidebar);
 	while ($prop = $sidebar->fetch_assoc())
 		echo "<input name = 'seller' type = 'radio' value = ".$prop['sellid'].">".$prop['uname']."<br><br>";

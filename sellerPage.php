@@ -46,6 +46,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		//insert into the table
 		$ins = "insert into items (itemName,sellerId,price,category,shape,color,imgLoc,type) values ('".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$_POST['category']."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."');";
 		$connect->query($ins);
+		echo "Please wait for the admin approval.";
 		$connect->close();
 	}
 ?>
@@ -119,7 +120,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		require 'config.php';
 
 		// now, to actually display the things inside here to the seller
-		$que = "select itemId, itemName from items where sellerId =".$_SESSION['userId'].";";
+		$que = "select itemId, itemName from items where sellerId =".$_SESSION['userId']." and status = 'Y';";
 		$result = $connect->query($que);
 		while ($row = $result->fetch_assoc())
 		{
@@ -162,7 +163,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 
 		//this is to only display the items that have been ordered
 		//this ain't gonna be a easy one
-		$que = "select userName, itemName , quantity, price from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId where sellerId = 1 and type = 'S';";
+		$que = "select userName, itemName , quantity, price from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId where sellerId = 1 and type = 'S' and status = 'Y';";
 		$result = $connect->query($que);
 		echo "<table width = 90% style = 'padding : 5px; margin : 5px;'>
 				<th> Items to be delievered </th>
@@ -188,7 +189,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		echo "</table>";
 
 		//this is for the items that are for bidding
-		$que = "select items.price , users.userName , items.itemName from items inner join users on users.userId = items.custId where sellerId = ".$_SESSION['userId']." and type = 'B';";
+		$que = "select items.price , users.userName , items.itemName from items inner join users on users.userId = items.custId where sellerId = ".$_SESSION['userId']." and type = 'B' and status = 'Y';";
 		$result = $connect->query($que);
 		echo "<table width = 90% style = 'padding : 5px; margin : 5px;'>
 				<th> Current bidding prices</th>

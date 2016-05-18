@@ -20,12 +20,20 @@
 	{
 		require 'config.php';
 		
+		//if there was an approval request, this shall occur
+		if(!empty($_POST['itemId']) && !empty($_POST['approve']))
+		{
+			$approve = "update items set status = 'Y' where itemId = ".$_POST['itemId'].";";
+			$connect->query($approve);
+		}
+
+
 		//to show stats, count the items on page
 		$userData = "select * from users;";
-		$itemData = "select * from items;";
+		$itemData = "select * from items where status = 'Y';";
 		$orderData = "select * from orders;";
-		$noOfBidItem = "select itemId from items where type = 'B';";
-		$noOfBids = "select itemId from items where type = 'B' and custId is not null;";
+		$noOfBidItem = "select itemId from items where type = 'B' and status = 'Y';";
+		$noOfBids = "select itemId from items where type = 'B' and custId is not null and status = 'Y';";
 
 		$userData = $connect->query($userData);
 		$itemData = $connect->query($itemData);
@@ -64,7 +72,44 @@
 				</div>
 			";
 
+		//This div is for the items that await approval from the admin
+			$itemPending = "select * from items where status = 'N';";
+			$res = $connect->query($itemPending);
+			echo "
+				<div style = 'height: 500px; overflow:auto;'>
+				<form method = 'post' action = 'adminPage.php'>
+				<p>Pending requests:</p>
+				";
+			while($row = $res->fetch_assoc())
+			{
+				$locs = $row['imgLoc'];		//since the array name has '' the things got complex
 		
+				//we only have the seller id of the person, this query is used to display it's actual name.
+				$que = "select userName from users where userId = ".$row['sellerId'].";";
+				$sellerName = $connect->query($que);
+				$sellerName = $sellerName->fetch_assoc();
+				//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
+		
+				echo "<div style='position: relative; height : 300px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
+				echo "<div style='position: absolute; top: 10px; left: 10px;border:none;'>";
+				echo "<img src = '$locs' height = 220 px width = 220px align = left>";
+				echo "</div>";
+				echo "<div style='position: absolute; top: 10px; left: 270px;border:none;'>";
+				echo "<p> Sold By  : ".$sellerName['userName']."</p>";
+				echo "<p> Color : ".$row['color']."</p>";
+				echo "<p> Shape : ".$row['shape']."</p>";
+				echo "<p> Item Name : ".$row['itemName']."</p>";
+				echo "<p> Price  : ".$row['price']."</p>";
+				echo "<p> Category : ".$row['category']."</p>";
+				echo "<input type = 'hidden' name = 'itemId' value = ".$row['itemId'].">";
+				echo "<input type = 'submit' name = 'approve' value = 'approve'>";
+				echo "</div>";
+				echo "</div>";
+			}
+			echo "</form></div>";
+
+
+
 		//This div is used to display all the items in the database.
 		echo "
 				<div style = 'height: 500px; overflow:auto;'>
