@@ -24,29 +24,41 @@
 		$userData = "select * from users;";
 		$itemData = "select * from items;";
 		$orderData = "select * from orders;";
+		$noOfBidItem = "select itemId from items where type = 'B';";
+		$noOfBids = "select itemId from items where type = 'B' and custId is not null;";
 
 		$userData = $connect->query($userData);
 		$itemData = $connect->query($itemData);
 		$orderData = $connect->query($orderData);
+		$noOfBidItem = $connect->query($noOfBidItem);
+		$noOfBids = $connect->query($noOfBids);
 
 		$noOfUsers = mysqli_num_rows($userData);
 		$noOfItems = mysqli_num_rows($itemData);
 		$noOfOrder = mysqli_num_rows($orderData);
+		$noOfBidItem  = mysqli_num_rows($noOfBidItem);
+		$noOfBids = mysqli_num_rows($noOfBids);
 
 		//this division is used to show the stats
 		echo"
-				<div style = 'width : 50%; top : 10px; left : 10px;'>
+				<div style = 'width : 70%; top : 10px; left : 10px;'>
 					<table style ='padding: 5px;'>
 						<th>Stats</th>
 						<tr>
 							<td> Total no. of users </td>
 							<td> Total no. of items </td>
+							<td> Items on Bid </td>
+							<td> Items on Sale </td>
 							<td> Total no. of orders</td>
+							<td> Total no. of bids</td>
 						</tr>
 						<tr>
 							<td>".$noOfUsers."</td>
 							<td>".$noOfItems."</td>
+							<td>".$noOfBidItem."</td>
+							<td>".($noOfItems-$noOfBidItem)."</td>
 							<td>".$noOfOrder."</td>
+							<td>".$noOfBids."</td>
 						</tr>
 					</table>
 				</div>
