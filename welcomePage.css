@@ -6,7 +6,6 @@ a.login
 	text-decoration:none;
 	color:brown;
 }
-
 ul {
 	list-style-type:none;
 	margin:0;
@@ -23,7 +22,7 @@ li {
     height: 50px;
 	
 }
-li button {
+li a {
 	display:block;
 	width:250px;
 	height: 50px;
@@ -33,12 +32,49 @@ li button {
 	color: white;
 	text-decoration:none;
 	background: gray;
-	border-radius:25px;
+	/*border-radius:25px;*/
 }
 
 /*Hover state for top level links*/
-li:hover button {
+li:hover a {
 	background: orange;
-	border-radius:25px;
+	/*border-radius:25px;*/
 	
+}
+
+/*Style for dropdown links*/
+li:hover ul button {
+	background: #f3f3f3;
+	color: #2f3036;
+	height: 45px;
+	line-height: 40px;
+	width:250px;
+	height: 50px;
+	
+}
+
+/*Hover state for dropdown links*/
+li:hover ul button:hover {
+	background: #19c589;
+	color: #fff;
+	
+}
+/*Hide dropdown links until they are needed*/
+li ul {
+	display: none;
+	width:250px;
+}
+
+/*Make dropdown links vertical*/
+li ul li {
+	display: block;
+	float: none;
+}
+
+
+
+ul li a:hover + .hidden, .hidden:hover {
+
+	display:block;
+  
 }

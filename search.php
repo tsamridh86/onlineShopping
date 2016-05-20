@@ -48,8 +48,10 @@
 		$que = $que."shape = '".$_GET['shape']."' and ";
 	if(!empty($_GET['color']))
 		$que = $que."color = '".$_GET['color']."' and ";
-	if(!empty($_GET['category']))
-		$que = $que."category = '".$_GET['category']."' and ";
+	if(!empty($_GET['category1']))
+		$que = $que."category like '".$_GET['category1']."%' and ";
+	if(!empty($_GET['category2']))
+		$que = $que."category like '%".$_GET['category2']."' and ";
 	if(!empty($_GET['cat']))
 		$que = $que."category = '".$_GET['cat']."' and ";
 	if(!empty($_GET['seller']))
@@ -94,7 +96,21 @@
 	$sidebar = "select distinct category from items where status = 'Y';";
 	$sidebar = $connect->query($sidebar);
 	while($prop = $sidebar->fetch_assoc())
-			echo "<input name = 'category' type = 'radio' value = ".$prop['category'].">".$prop['category']."<br><br>";	
+	{
+			$len = 0;
+			while($prop['category'][$len++]!='_');
+			echo "<input name = 'category1' type = 'radio' value = ".substr($prop['category'], 0, $len-1).">".substr($prop['category'], 0, $len-1)."<br><br>";	
+	}
+
+	echo "	Enter the category of the item:<br><br>";
+	$sidebar = "select distinct category from items where status = 'Y';";
+	$sidebar = $connect->query($sidebar);
+	while($prop = $sidebar->fetch_assoc())
+	{
+			$len = 0;
+			while($prop['category'][$len++]!='_');
+			echo "<input name = 'category2' type = 'radio' value = ".substr($prop['category'], $len).">".substr($prop['category'],$len)."<br><br>";	
+	}
 
 	//search by seller
 	echo "Enter the seller you want to buy from: <br><br>";	

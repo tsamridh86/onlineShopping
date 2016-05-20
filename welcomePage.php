@@ -54,14 +54,39 @@
 
 
 <!-- This div id for the navigational bar-->
-<div style="position: relative; top: 70px; left: 50px;">
+<div style="position: relative; top: 70px; left: 50px; z-index:2;">
 	<form method="get" action = "search.php">
 	<ul>
-		<li><button type="submit" name = "cat" value="men"> Men </button></li>
-		<li><button type="submit" name = "cat" value="women">Women</button>	</li>
-		<li><button type="submit" name = "cat" value="kids">Kids</button></li>
-		<li><button type="submit" name = "cat" value="sunglasses">Sunglasses</button></li>
-		<li><button type="submit" name = "cat" value="antique">Antiques</button></li>
+		<li><a href="#"  > Men </a>
+				<ul class="hidden">
+					<li><button name = "cat" type = "submit" value ="men_sunglasses">Sunglasses</button></li>
+					<li><button name = "cat" type = "submit" value ="men_eyeglasses">Eyeglasses</button></li>
+				</ul>
+		</li>
+		<li><a href="#" >Women</a>
+			<ul class="hidden">
+					<li><button name = "cat" type = "submit" value ="women_sunglasses">Sunglasses</button></li>
+					<li><button name = "cat" type = "submit" value ="women_eyeglasses">Eyeglasses</button></li>
+			</ul>
+		</li>
+		<li><a href="#" >Kids</a>
+			<ul class="hidden">
+					<li><button name = "cat" type = "submit" value ="kids_sunglasses">Sunglasses</button></li>
+					<li><button name = "cat" type = "submit" value ="kids_eyeglasses">Eyeglasses</button></li>
+			</ul>
+		</li>
+		<li><a href="#" >Lens</a>
+			<ul class="hidden">
+					<li><button name = "cat" type = "submit" value ="lens_corrective">Corrective</button></li>
+					<li><button name = "cat" type = "submit" value ="lens_colored">Colored</button></li>
+			</ul>
+		</li>
+		<li><a href="#" >Sell type</a>
+			<ul class="hidden">
+					<li><button name = "type" type = "submit" value ="B">On Bidding</button></li>
+					<li><button name = "type" type = "submit" value ="S">On Sale</button></li>
+			</ul>
+		</li>
 	</ul>
 	</form>
 </div>
@@ -104,8 +129,10 @@
 		$sellerName = $connect->query($sellerName);
 		$sellerName = $sellerName->fetch_assoc();
 		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
-		
-		echo "<div style='position: relative; height : 270px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
+		$len = 0;
+		while($row['category'][$len++]!='_');
+
+		echo "<div style='position: relative; height : 300px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
 		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
 		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
 		echo "</div>";
@@ -113,9 +140,10 @@
 		echo "<p> Sold By  : ".$sellerName['userName']."</p>";
 		echo "<p> Color : ".$row['color']."</p>";
 		echo "<p> Shape : ".$row['shape']."</p>";
-		echo "<p> Item Name : ".$row['itemName']."</p>";
+		echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
 		echo "<p> Price  : ".$row['price']."</p>";
-		echo "<p> Category : ".$row['category']."</p>";
+		echo "<p> Category : ".substr($row['category'], 0, $len-1)."</p>";
+		echo "<p> Type : ".substr($row['category'], $len)."</p>";
 		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
 		echo "</div>";
 		echo "</div>";

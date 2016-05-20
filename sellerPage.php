@@ -4,9 +4,8 @@
 </head>
 
 <!--
-This page is exclusive to the seller only, i will add the extension to redirect the page if the person using is not a seller
 Using the relation :
-item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), category varchar(20), itemId int primary key, price int , imgLoc varchar(50))
+item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), category varchar(50), itemId int primary key, price int , imgLoc varchar(50))
 
 -->
 <?php
@@ -17,7 +16,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	if($_SESSION['userType']=='C') header("location:welcomePage.php");
 	
 	//this is to avoid the execution of adding into the database if everything is ready
-	if(!empty($_POST['itemName']) && !empty($_POST['price']) && is_uploaded_file($_FILES['image']['tmp_name']) && !empty($_POST['category'])&& !empty($_POST['shape']) && !empty($_POST['color']))
+	if(!empty($_POST['itemName']) && !empty($_POST['price']) && is_uploaded_file($_FILES['image']['tmp_name']) && !empty($_POST['category1']) && !empty($_POST['category2']) && !empty($_POST['brand'])&& !empty($_POST['shape']) && !empty($_POST['color']))
 	{
 		//connect to the database & check whether as table exists for users
 		//some one may try login without the execution of the user table existence.
@@ -43,13 +42,39 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		if($_POST['type']=='Keep On Bidding') $type = 'B';
 		else $type = 'S';
 
+		$category = $_POST['category1']."_".$_POST['category2'];
+
 		//insert into the table
-		$ins = "insert into items (itemName,sellerId,price,category,shape,color,imgLoc,type) values ('".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$_POST['category']."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."');";
+		$ins = "insert into items (itemName,sellerId,price,brand,category,shape,color,imgLoc,type) values ('".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$_POST['brand']."','".$category."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."');";
 		$connect->query($ins);
 		echo "Please wait for the admin approval.";
 		$connect->close();
 	}
 ?>
+
+<!--This script is for blocking unnesscary items while selecting the items-->
+<script type="text/javascript">
+	function checkfield()
+	{
+		var cat1 = document.getElementById("category1");
+		var cat2 = document.getElementById("category2");
+		if(cat1.value == 'lens')
+		{
+			cat2.options[1].disabled = true;
+			cat2.options[2].disabled = true;
+			cat2.options[3].disabled = false;
+			cat2.options[4].disabled = false;
+		}
+		else
+		{
+			cat2.options[1].disabled = false;
+			cat2.options[2].disabled = false;
+			cat2.options[3].disabled = true;
+			cat2.options[4].disabled = true;
+		}
+	}
+</script>
+
 
 <!-- This division is for the items that are going to be added to database -->
 <div style="position: relative; top: 10px; left: 10px; border: 2px solid black; width: 50%; margin: 10px; padding: 10px;">
@@ -61,9 +86,13 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		<td><input type = "text" name = "itemName" required></td>
 	</tr>
 	<tr>
+		<td>Enter the brand of the item: </td>
+		<td><input type = "text" name = "brand" required></td>
+	</tr>
+	<tr>
 		<td>Enter the shape of the item: </td>
 		<td>
-			<select name = 'shape'>
+				<select name = 'shape'>
 				<option value = 'normal'>	Normal 	</option>
 				<option value = 'round'>	Round 	</option>
 				<option value = 'full_frame'>Full Frame </option>
@@ -85,12 +114,23 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	</tr>
 	<tr>
 		<td>Enter a category of the item:</td>
-		<td><select name = 'category'>
+		<td><select name = 'category1' id = 'category1' onchange="checkfield();">
+				<option > Select a category </option>
 				<option value = 'men'>				Men 			</option>
 				<option value = 'women'>			Women 			</option>
 				<option value = 'kids'>				Kids		 	</option>
-				<option value = 'sunglasses'>		Sunglasses		</option>
-				<option value = 'antique'>			Antique			</option>
+				<option value = 'lens'>				Lens			</option>
+			</select>
+		</td>	
+	</tr>
+	<tr>
+		<td>Enter a type of the item:</td>
+		<td><select name = 'category2' id = 'category2'>
+				<option > Select a type </option>
+				<option value = 'sunglasses'>			Sunglasses		</option>
+				<option value = 'eyeglasses'>			Eyeglasses 		</option>
+				<option value = 'corrective'>			Corrective	 	</option>
+				<option value = 'colored'>				Colored			</option>
 			</select>
 		</td>	
 	</tr>
