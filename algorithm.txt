@@ -122,3 +122,42 @@ if the name is unique, then the data obtained from the form in inserted into the
 then, the user is logged it, each user is directed to it's appropiate page.
 
 5.sellerPage.php
+	this page is exclusive to the seller only, if a customer types in sellerpage.php s/he will be redirected to welcome page.php(line 16 & 17)
+
+	the upcoming if condition will not start anyway, so directly move to form below
+	the form requires filling up of the data of the items inside it, the form redirects it to this page itself,
+	now the if condition that did not work previously, will be activated,
+	as soon as the if condition true, 
+	
+	the image that was previously kept as the input will be uploaded,
+	now, the image is NOT stored in the database it is only stored in a location of the server,
+	so, we only the save the location of the image in the database, on the actual image itself,
+	however, there maybe a chance that there may already exist a file that has the same name as the one being uploaded,
+	so, if a file with the same name exists, then,
+	substr, breaks the nae of the file, adds a number into it, & then reconcate them again, this way we bypass the problem of same name files.
+	This new-renamed file is then moved into the images folder, & it's location along with it's name is stored inside the items table.
+
+	Following the upload, the category will also be concated & saved,
+		Although there are 2 seperate inputs, category1 & category2, (but displayed to the user & category & type)
+		It is concatenated as category1_category2,
+		This is later used for searching in search.php & hence the concatenated result is saved in the database.
+
+	There were 2 submits buttons on the page, depending upon which one was clicked, the type get's determined.
+
+	It is then inserted into the table, now, we don't provide & itemId because it is an auto_increment property, custId is also left as NULL, custId value is set as NULL until some user bids for that item,(also, an item on sale will always have it's type attribute as NULL), then it's status is also by default 'N' & will only be active if & only if, the admin provides approval.
+
+	After the insertion, the user is requested to wait for admin approval for the sale of the item.
+
+
+	Below that, there is a dropdown menu, if a seller want to delete his approved items.
+
+		using select * from items where sellerId = $_SESSION['userId']
+		will give the items sold by that seller only (the user can only be seller because other type of users are redirected away from this page)
+
+		all the items are displayed in the dropdown menu,
+		If user chooses one option then, the itemId of that item will be sent to the same page
+		& will get deleted by using, "delete from items where itemId = $_POST['itemId'];
+
+	The last div simply shows all the orders that have been requested,
+	
+

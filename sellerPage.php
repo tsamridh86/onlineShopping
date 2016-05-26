@@ -26,8 +26,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		$file_temp = $_FILES['image']['tmp_name'];
 		$file_name = $_FILES['image']['name'];
 		
-		//combining categories
-		$category = $_POST['category1']."_".$_POST['category2'];
+		
 		//if the same name of the file exists then rename it adding numbers to it
 		$i = 0 ;
 		while(file_exists("images/".$file_name))
@@ -40,6 +39,9 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		}
 		$i = 0 ; 	//reset the value for i, since the loop has already run it's course.
 		move_uploaded_file($file_temp,"images/".$file_name);	//this uploads it into the server
+
+		//combining categories
+		$category = $_POST['category1']."_".$_POST['category2'];
 
 		//there are two submit buttons, that determines whether it is to be kept on Bidding or sale, so
 		if($_POST['type']=='Keep On Bidding') $type = 'B';
