@@ -23,7 +23,9 @@
 		</table>
 	</form>
 </div>
-
+<div style="position: absolute; top : 60px; right:1px;">
+<input type="submit" value="" style="border-style: none; background: url('pic.jpg') no-repeat; width: 1495px; height: 300px; background-size: 100% 100%;">
+</div>
 <!-- Login tab will only be displayed if there is no user logged in.
 	 & for a logged in user there will be a logout option -->
 <div style='position: absolute; top : 10px; right: 10px;'>
@@ -54,37 +56,34 @@
 
 
 <!-- This div id for the navigational bar-->
-<div style="position: relative; top: 70px; left: 50px; z-index:2;">
+<div style="position: relative; top: 354px; left: 80px; z-index:2;">
 	<form method="get" action = "search.php">
 	<ul>
-		<li><a href="#"  > Men </a>
-				<ul class="hidden">
-					<li><button name = "cat" type = "submit" value ="men_sunglasses">Sunglasses</button></li>
-					<li><button name = "cat" type = "submit" value ="men_eyeglasses">Eyeglasses</button></li>
+		<li>
+		<a href="#">Men</a>
+			<ul class="hidden">
+				<li><button type = "submit" name = 'cat' value = "men_sunglasses">Sunglasses</button></li>
+				<li><button type = "submit" name = 'cat' value = "women_eyeglasses">Eyeglasses</a></li>
 				</ul>
 		</li>
-		<li><a href="#" >Women</a>
+		<li>
+			<a href="#">Women</a>
 			<ul class="hidden">
-					<li><button name = "cat" type = "submit" value ="women_sunglasses">Sunglasses</button></li>
-					<li><button name = "cat" type = "submit" value ="women_eyeglasses">Eyeglasses</button></li>
+				<li><button type = "submit" name = 'cat' value = "women_sunglasses">Sunglasses</button></li>
+				<li><button type = "submit" name = 'cat' value = "women_eyeglasses">Eyeglasses</button></li>
 			</ul>
 		</li>
-		<li><a href="#" >Kids</a>
+		<li>
+			<a href="#">Kids</a>
 			<ul class="hidden">
-					<li><button name = "cat" type = "submit" value ="kids_sunglasses">Sunglasses</button></li>
-					<li><button name = "cat" type = "submit" value ="kids_eyeglasses">Eyeglasses</button></li>
+				<li><button type = "submit" name = 'cat' value = "kids_sunglasses">Sunglasses</button></li>
+				<li><button type = "submit" name = 'cat' value = "kids_eyeglasses">Eyeglasses</button></li>
 			</ul>
 		</li>
-		<li><a href="#" >Lens</a>
+		<li><a href="#">Sale Type</a>
 			<ul class="hidden">
-					<li><button name = "cat" type = "submit" value ="lens_corrective">Corrective</button></li>
-					<li><button name = "cat" type = "submit" value ="lens_colored">Colored</button></li>
-			</ul>
-		</li>
-		<li><a href="#" >Sell type</a>
-			<ul class="hidden">
-					<li><button name = "type" type = "submit" value ="B">On Bidding</button></li>
-					<li><button name = "type" type = "submit" value ="S">On Sale</button></li>
+				<li><button type = "submit" name = 'type' value = "S">For Sale only</button></li>
+				<li><button type = "submit" name = 'type' value = "B">For Bidding only</button></li>
 			</ul>
 		</li>
 	</ul>
@@ -92,8 +91,8 @@
 </div>
 
 
-<div style='position: relative; top : 150px; left:10px; '>
-	<h1 style='font-family: georgia;'>Now Trending</h1>
+<div style='position: relative; top : 420px; left:10px; '>
+	<input type="submit" value="" style="border-style: none; background: url('trend.jpg') no-repeat; width: 450px; height: 120px; background-size: 100% 100%;">
 	<?php
 		//connect to the database & stuff
 		require 'config.php';
@@ -123,16 +122,20 @@
 			$count = $count + 1;
 			
 		$locs = $row['imgLoc'];		//since the array name has '' the things got complex
-	
+		
+		//category seperation tarika
+		$len = 0;
+		while($row['category'][$len++]!="_");
+		$cat1 = substr($row['category'],0,$len-1);
+		$cat2 = substr($row['category'],$len);
+		
 		//we only have the seller id of the person, this query is used to display it's actual name.
 		$sellerName = "select userName from users where userId = ".$row['sellerId'].";";
 		$sellerName = $connect->query($sellerName);
 		$sellerName = $sellerName->fetch_assoc();
 		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
-		$len = 0;
-		while($row['category'][$len++]!='_');
-
-		echo "<div style='position: relative; height : 300px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
+		
+		echo "<div style='position: relative; height : 300px; width : 50%; top: 10px; left : 1px; border:2px solid grey; margin: 10px; '>";
 		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
 		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
 		echo "</div>";
@@ -142,8 +145,8 @@
 		echo "<p> Shape : ".$row['shape']."</p>";
 		echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
 		echo "<p> Price  : ".$row['price']."</p>";
-		echo "<p> Category : ".substr($row['category'], 0, $len-1)."</p>";
-		echo "<p> Type : ".substr($row['category'], $len)."</p>";
+		echo "<p> Category : ".$cat1."</p>";
+		echo "<p> Category : ".$cat2."</p>";
 		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
 		echo "</div>";
 		echo "</div>";

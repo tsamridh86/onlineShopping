@@ -1,0 +1,122 @@
+This doc is for the #nettra :P project, i have assumed you know SQL,PHP, so i haven't explained baby details here.
+
+Some minor things(1):
+after using a select query, i have retreived the values in fetch_assoc() mode:
+eg. $que = "select * from users";
+	$result = $connect->query($que);
+	while($res = $result->fetch_assoc())
+
+the select commands brings data from the server to the client in a specific format, when using the fetch_assoc() method,
+it brings in all the details as the attribute name = array Name ;
+
+sql output :
+userId  |  userName | autho
+1		|	lol		|	A
+2		|	hi 		|	C
+
+then
+$res['userId'] = {1,2}
+$res['userName'] = {lol,hi}
+$res['autho'] = {A,C}
+ ^ 		^		^	^
+dumy   attr     1st 2nd
+var    name     itr itr
+
+there are other methods of retrieving data too :
+here is some help : http://www.w3schools.com/php/php_mysql_select.asp
+
+
+Some other minor things(2):
+when using a form,
+<form method = "get" action = "somepage.html" enctype = "multiform/form-data">
+	<input name = "lol" type = "text">
+	<input type = "file" name = "pic">
+	<select name = "t">
+		<option value = 1 ></option>
+		<option value = 2 ></option>
+	</select>	
+	<input type = "submit">
+
+A form in php is used to move from one page to another along with some data in it.
+	a form has method i.e., either get or post,
+	get will send all the data to other page, in such a way that all parameters are visible in the url.
+	this is useful for searching querys as the user does not has to return to the previous page to search,
+	simply modifying the url is enough.
+	post method will send data to other page, hidden to everyone, this is typically secure & maybe used in forms,
+	that have sensitive data like passwords , images etc.
+
+	If, method get is used, then the information is available on the other page as $_GET['inputName'];
+	& if method = post then, $_POST['inputName']
+
+	action = "" , is the destination page where the input data needs to be sent.
+
+	enctype = "multiform/form-data" is only required when you have to send an image to the other page.
+	Images & any other type of files uploaded are available insides $_FILES['fieldName']['tmp_name'] (here tmp_name is syntax)
+
+	every input / select option must have a name to it, for it to be retreived on the other side.
+
+	for the above example,
+	after 
+
+1. NLI.php
+	to make sure a user is logged out, we need to destroy it's sessions, however, it cannot be directly destroyed.
+	Hence:
+	session_start(); <-- Activates all user session & variables
+	session_destroy(); <--Destroys session data & variables 
+& since now all the session variables have been destroyed, it equivalent of being logged out.
+
+
+2.config.php
+
+	we create a connection to the mysql database using the command ,
+	$connect = mysqli("serverName","userName","password");
+
+	one may also connect as : $connect = mysqli("serverName","userName","password","databaseName");
+	but we have assumed that the database does not exists, so we use the first command.
+	
+	here, $connect stores the data about the database connection.
+
+	$dbstart = "create database if not exists shops;";
+	$connect->query($dbstart);
+	mysqli_select_db($connect , "shops");
+
+	creates the database if it does not exists & will NOT replace an existing database.
+	it executes this query & connect onto the shops database,
+	table is not created directly because all the tables must lie inside a database.
+
+	then the three tables are created, 
+	users, orders, items,
+
+	!IMPORTANT
+	this page does not close the connection of database by 
+	$connect->close();
+	this is so that whenever we use require 'config.php';
+	we can use $connect as a connection to the database & hence we do not require to create a new variable everytime,
+	however, always remember close the connection after you are done, because it could cause some errors.
+
+
+3.loginpage
+
+when entering the loginPage the first time the if condition will not work anyway, so directly jump to the form far below in the page. The form is rather simple, you'll understand it
+
+After suitable values have been kept inside the form, it redirects to itself,
+now the both the values of the if conditions are satisfied,
+since the userName is unique, is search for that person & brings up his/her details (the select command brings up the details)
+it checks it with the input given, if correct then
+sessions are started,
+session variable ( user-defined) userType , userName & userId are created & given appropiate values
+(these are later used to insert into tables, check whether the correct users are logged in or not etc.)
+then the logged in user is directed to it's appropiate page
+otherwise the warning the userName/password does not exists is simply displayed on the screen.
+
+4. SignUp page
+
+	similar to the loginpage, the if conditions will not work when you enter the page the first time, so jump ahead to the form.
+After suitable values have been entered to the form, then, it sends the data from the page to itself.
+
+Now, all the if conditions are satisfied,
+	on lines, 8 to 10, all the userName from the database are retreived & is checked with the current user input, 
+	if a name on the database exists same as the user, then a msg it displayed to rename it.
+
+if the name is unique, then the data obtained from the form in inserted into the database, then, session variables are intialized
+then, the user is logged it, each user is directed to it's appropiate page.

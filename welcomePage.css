@@ -6,6 +6,8 @@ a.login
 	text-decoration:none;
 	color:brown;
 }
+
+/*Strip the ul of padding and list styling*/
 ul {
 	list-style-type:none;
 	margin:0;
@@ -18,13 +20,13 @@ li {
 	display:inline-block;
 	float: left;
 	margin-right: 1px;
-	width: 250px;
+	width: 200px;
     height: 50px;
 	
 }
 li a {
 	display:block;
-	width:250px;
+	width:200px;
 	height: 50px;
 	text-align: center;
 	line-height: 50px;
@@ -37,19 +39,18 @@ li a {
 
 /*Hover state for top level links*/
 li:hover a {
-	background: orange;
+	background: red;
 	/*border-radius:25px;*/
 	
 }
 
 /*Style for dropdown links*/
 li:hover ul button {
+	width:200px;
 	background: #f3f3f3;
 	color: #2f3036;
-	height: 45px;
-	line-height: 40px;
-	width:250px;
 	height: 50px;
+	line-height: 40px;
 	
 }
 

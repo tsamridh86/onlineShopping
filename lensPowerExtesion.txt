@@ -1,0 +1,74 @@
+<!-- This patch is to add the power of the glasses if needed -- >
+
+<!-- Changes that are needed here will be on the order table, ie, config.php , then 
+	it would require some changes on orderPage.php & orderComplete.php.
+	No other pages would be changed. The adminPage & the sellerPage display will have to be readjusted for display purposes only,
+	there will be no other significant changes otherwise. -->
+
+
+<!--Changes on config.php -->
+
+<?php
+//to be changed in line no 47
+//the table of orders are extended to accomodate the power, however the table of items are not extended, because power of the lens are determined by the order given & not the item, hence it is better to be placed in orders table
+$que = "create table if not exists orders ( orderId int primary key auto_increment, custId int references users(userId) , itemId int references items(itemId) on delete set null, quantity int , leftPower int , rightPower int);";
+?>
+
+<!--Changes on orderPage.php -->
+<!-- The form must be changed & triggered on an if condition:
+	if ( 2nd category == eyeglasses ) then, echo <input type = number name = leftPower > & echo out the rightPower
+	this must also be placed inside the if command -->
+
+
+
+
+<!--Changes to be made in orderComplete.php -->
+<?php
+
+//mod1
+//the if condition is not extended because, if customer leaves it empty we assume it to be zero,
+//so, add these  extra line anywhere between line no.8 & 15
+if(empty($_POST['leftPower'])) $leftPower = 0;
+else $leftPower = $_POST['leftPower'];
+if(empty($_POST['rightPower'])) $rightPower = 0;
+else $rightPower = $_POST['rightPower'];
+
+
+//mod2
+//on line no 16 replace the older insert query with
+$order = "insert into orders (custId,itemId,quantity,leftPower,rightPower) values (".$_SESSION['userId'].",".$_POST['itemId'].",".$_POST['quantity'].",".$leftPower.",".$rightPower.");";
+
+
+//mod3(optional)
+//the table on line 22 maybe modified
+//this table can be extended to display the power of the lenses that has been ordered
+echo "<table>
+				<th> Order Review : </th>
+					<tr>
+						<td> Item Name : </td>
+						<td>".$itemData['itemName']."</td>
+					</tr>
+					<tr>
+						<td> Quantity : </td>
+						<td>".$_POST['quantity']."</td>
+					</tr>
+					<tr>
+						<td> Power on Left: </td>
+						<td>".$_leftPower."</td>
+					</tr>
+					<tr>
+						<td> Power on Right : </td>
+						<td>".$rightPower."</td>
+					</tr>
+					<tr>
+						<td> Price : </td>
+						<td>".$itemData['price']."</td>
+					</tr>
+					<tr>
+						<td> Grand total : </td>
+						<td>".($itemData['price']*$_POST['quantity'])."</td>
+
+					</tr>	
+				</table>
+				";
+?>
