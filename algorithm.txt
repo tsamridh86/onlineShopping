@@ -172,4 +172,5 @@ then, the user is logged it, each user is directed to it's appropiate page.
 	similarly a table of items on bid will be kept on display, showing the latest bidder & the peak price.
 
 
-
+6. adminpage.php
+	This page just shows stats for the most part
