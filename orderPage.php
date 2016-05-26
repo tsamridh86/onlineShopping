@@ -45,6 +45,12 @@
 		$sellerName = $connect->query($que);
 		$sellerName = $sellerName->fetch_assoc();
 
+		//category seperation tarika
+		$len = 0;
+		while($row['category'][$len++]!="_");
+		$cat1 = substr($row['category'],0,$len-1);
+		$cat2 = substr($row['category'],$len);
+		
 		//this form will redirect to the order complete page
 		echo "<form method = 'post' action = 'orderComplete.php'>";
 		//show the item to the user, this time a little larger :P
@@ -54,11 +60,12 @@
 		echo "</div>";
 		echo "<div style='position: absolute; top: 10px; left: 550px;'>";
 		echo "<p> Sold By  : ".$sellerName['userName']."</p>";
-		echo "<p> Item Name : ".$row['itemName']."</p>";
+		echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
 		echo "<p> Price  : ".$row['price']."</p>";
 		echo "<p> Color : ".$row['color']."</p>";
 		echo "<p> Shape : ".$row['shape']."</p>";
-		echo "<p> Category : ".$row['category']."</p>";
+		echo "<p> Category : ".$cat1."</p>";
+		echo "<p> Category : ".$cat2."</p>";
 		if ($row['type']=='S')
 		echo "<p> Quantity : <input type = number name = 'quantity' > </p>";
 		else 

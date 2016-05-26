@@ -17,7 +17,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	if($_SESSION['userType']=='C') header("location:welcomePage.php");
 	
 	//this is to avoid the execution of adding into the database if everything is ready
-	if(!empty($_POST['itemName']) && !empty($_POST['price']) && is_uploaded_file($_FILES['image']['tmp_name']) && !empty($_POST['category'])&& !empty($_POST['shape']) && !empty($_POST['color']))
+	if(!empty($_POST['itemName']) && !empty($_POST['price']) && !empty($_POST['brand'])&& is_uploaded_file($_FILES['image']['tmp_name']) && !empty($_POST['category1']) && !empty($_POST['category2']) && !empty($_POST['shape']) && !empty($_POST['color']))
 	{
 		//connect to the database & check whether as table exists for users
 		//some one may try login without the execution of the user table existence.
@@ -26,6 +26,8 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		$file_temp = $_FILES['image']['tmp_name'];
 		$file_name = $_FILES['image']['name'];
 		
+		//combining categories
+		$category = $_POST['category1']."_".$_POST['category2'];
 		//if the same name of the file exists then rename it adding numbers to it
 		$i = 0 ;
 		while(file_exists("images/".$file_name))
@@ -44,7 +46,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		else $type = 'S';
 
 		//insert into the table
-		$ins = "insert into items (itemName,sellerId,price,category,shape,color,imgLoc,type) values ('".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$_POST['category']."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."');";
+		$ins = "insert into items (brand,itemName,sellerId,price,category,shape,color,imgLoc,type) values ('".$_POST['brand']."','".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$category."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."');";
 		$connect->query($ins);
 		echo "Please wait for the admin approval.";
 		$connect->close();
@@ -74,6 +76,10 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		</td>
 	</tr>
 	<tr>
+		<td>Enter the brand of the item : </td>
+		<td><input type = 'text' name = 'brand' required></td>
+	</tr>
+	<tr>
 		<td>Enter the color of the item : </td>
 		<td><input type = 'text' name = 'color' required></td>
 	</tr>
@@ -85,12 +91,18 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	</tr>
 	<tr>
 		<td>Enter a category of the item:</td>
-		<td><select name = 'category'>
+		<td><select name = 'category1'>
 				<option value = 'men'>				Men 			</option>
 				<option value = 'women'>			Women 			</option>
 				<option value = 'kids'>				Kids		 	</option>
-				<option value = 'sunglasses'>		Sunglasses		</option>
-				<option value = 'antique'>			Antique			</option>
+			</select>
+		</td>	
+	</tr>
+	<tr>
+		<td>Enter a type of the item:</td>
+		<td><select name = 'category2'>
+				<option value = 'sunglasses'>			Sunglasses		</option>
+				<option value = 'eyeglasses'>			Eyeglasses		</option>
 			</select>
 		</td>	
 	</tr>
@@ -163,7 +175,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 
 		//this is to only display the items that have been ordered
 		//this ain't gonna be a easy one
-		$que = "select userName, itemName , quantity, price from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId where sellerId = 1 and type = 'S' and status = 'Y';";
+		$que = "select userName, itemName , quantity, price from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId where sellerId = ".$_SESSION['userId']." and type = 'S' and status = 'Y';";
 		$result = $connect->query($que);
 		echo "<table width = 90% style = 'padding : 5px; margin : 5px;'>
 				<th> Items to be delievered </th>

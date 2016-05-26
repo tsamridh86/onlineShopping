@@ -2,6 +2,8 @@
 <link rel="stylesheet" href="welcomePage.css">
 <style>
  p {font-family: sans-serif; }
+ p {font-weight: bold; }
+
 </style>
 </head>
 
@@ -48,8 +50,10 @@
 		$que = $que."shape = '".$_GET['shape']."' and ";
 	if(!empty($_GET['color']))
 		$que = $que."color = '".$_GET['color']."' and ";
-	if(!empty($_GET['category']))
-		$que = $que."category = '".$_GET['category']."' and ";
+	if(!empty($_GET['category1']))
+		$que = $que."category like '".$_GET['category1']."%' and ";
+	if(!empty($_GET['category2']))
+		$que = $que."category like '%".$_GET['category2']."' and ";
 	if(!empty($_GET['cat']))
 		$que = $que."category = '".$_GET['cat']."' and ";
 	if(!empty($_GET['seller']))
@@ -89,12 +93,16 @@
 	while($prop = $sidebar->fetch_assoc())
 			echo "<input name = 'color' type = 'radio' value = ".$prop['color'].">".$prop['color']."<br><br>";
 	
-	//category of item
+	//category1 of item
 	echo "	Enter the category of the item:<br><br>";
-	$sidebar = "select distinct category from items where status = 'Y';";
-	$sidebar = $connect->query($sidebar);
-	while($prop = $sidebar->fetch_assoc())
-			echo "<input name = 'category' type = 'radio' value = ".$prop['category'].">".$prop['category']."<br><br>";	
+	echo "<input type = 'radio' name = 'category1' value = 'men'>Men<br><br>";
+	echo "<input type = 'radio' name = 'category1' value = 'women'>Women<br><br>";
+	echo "<input type = 'radio' name = 'category1' value = 'kids'>Kids<br><br>";
+	
+	//category2 of item
+	echo " Enter the type of item: <br><br>";
+	echo "<input type = 'radio' name = 'category2' value = 'sunglasses'>Sunglasses<br><br>";
+	echo "<input type = 'radio' name = 'category2' value = 'eyeglasses'>Eyeglasses<br><br>";
 
 	//search by seller
 	echo "Enter the seller you want to buy from: <br><br>";	
@@ -114,12 +122,20 @@
 			</div>
 			</form>";		
 
-	echo "<div style='overflow : auto; position: absolute; top: 50px; left: 300px; height: 80%; width: 70%;'>";
+			
+	//for displaying search results		
+	echo "<div style='overflow : auto; position: absolute; top: 50px; left: 330px; height: 80%; width: 70%;'>";
 	//a form is needed to change pages with the data intact
 	echo "<form method = get action = 'orderPage.php'>";
 	while($row = $result->fetch_assoc())
 	{
 		$locs = $row['imgLoc'];		//since the array name has '' the things got complex
+		
+		//category seperation tarika
+		$len = 0;
+		while($row['category'][$len++]!="_");
+		$cat1 = substr($row['category'],0,$len-1);
+		$cat2 = substr($row['category'],$len);
 		
 		//we only have the seller id of the person, this query is used to display it's actual name.
 		$que = "select userName from users where userId = ".$row['sellerId'].";";
@@ -127,7 +143,7 @@
 		$sellerName = $sellerName->fetch_assoc();
 		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
 		
-		echo "<div style='position: relative; height : 300px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
+		echo "<div style='position: relative; height : 330px; width : 70%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
 		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
 		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
 		echo "</div>";
@@ -135,9 +151,10 @@
 		echo "<p> Sold By  : ".$sellerName['userName']."</p>";
 		echo "<p> Color : ".$row['color']."</p>";
 		echo "<p> Shape : ".$row['shape']."</p>";
-		echo "<p> Item Name : ".$row['itemName']."</p>";
+		echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
 		echo "<p> Price  : ".$row['price']."</p>";
-		echo "<p> Category : ".$row['category']."</p>";
+		echo "<p> Category : ".$cat1."</p>";
+		echo "<p> Category : ".$cat2."</p>";
 		if($row['type']=='B')
 		{
 			$que = "select userName from items inner join users on items.custId = users.userId where itemId = ".$row['itemId'].";";

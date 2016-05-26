@@ -83,14 +83,20 @@
 			while($row = $res->fetch_assoc())
 			{
 				$locs = $row['imgLoc'];		//since the array name has '' the things got complex
-		
+				
+				//category seperation tarika
+				$len = 0;
+				while($row['category'][$len++]!="_");
+				$cat1 = substr($row['category'],0,$len-1);
+				$cat2 = substr($row['category'],$len);
+				
 				//we only have the seller id of the person, this query is used to display it's actual name.
 				$que = "select userName from users where userId = ".$row['sellerId'].";";
 				$sellerName = $connect->query($que);
 				$sellerName = $sellerName->fetch_assoc();
 				//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
 		
-				echo "<div style='position: relative; height : 300px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
+				echo "<div style='position: relative; height : 330px; width : 70%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
 				echo "<div style='position: absolute; top: 10px; left: 10px;border:none;'>";
 				echo "<img src = '$locs' height = 220 px width = 220px align = left>";
 				echo "</div>";
@@ -98,9 +104,10 @@
 				echo "<p> Sold By  : ".$sellerName['userName']."</p>";
 				echo "<p> Color : ".$row['color']."</p>";
 				echo "<p> Shape : ".$row['shape']."</p>";
-				echo "<p> Item Name : ".$row['itemName']."</p>";
+				echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
 				echo "<p> Price  : ".$row['price']."</p>";
-				echo "<p> Category : ".$row['category']."</p>";
+				echo "<p> Category : ".$cat1."</p>";
+				echo "<p> Type : ".$cat2."</p>";
 				echo "<input type = 'hidden' name = 'itemId' value = ".$row['itemId'].">";
 				echo "<input type = 'submit' name = 'approve' value = 'approve'>";
 				echo "</div>";
@@ -120,13 +127,17 @@
 		{
 		$locs = $row['imgLoc'];		//since the array name has '' the things got complex
 		
+		$len = 0;
+		while($row['category'][$len++]!="_");
+		$cat1 = substr($row['category'],0,$len-1);
+		$cat2 = substr($row['category'],$len);
 		//we only have the seller id of the person, this query is used to display it's actual name.
 		$que = "select userName from users where userId = ".$row['sellerId'].";";
 		$sellerName = $connect->query($que);
 		$sellerName = $sellerName->fetch_assoc();
 		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
 		
-		echo "<div style='position: relative; height : 300px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
+		echo "<div style='position: relative; height : 330px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
 		echo "<div style='position: absolute; top: 10px; left: 10px;border:none;'>";
 		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
 		echo "</div>";
@@ -134,9 +145,10 @@
 		echo "<p> Sold By  : ".$sellerName['userName']."</p>";
 		echo "<p> Color : ".$row['color']."</p>";
 		echo "<p> Shape : ".$row['shape']."</p>";
-		echo "<p> Item Name : ".$row['itemName']."</p>";
+		echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
 		echo "<p> Price  : ".$row['price']."</p>";
-		echo "<p> Category : ".$row['category']."</p>";
+		echo "<p> Category : ".$cat1."</p>";
+		echo "<p> Type : ".$cat2."</p>";
 		if($row['type']=='B')
 		{
 			$que = "select userName from items inner join users on items.custId = users.userId where itemId = ".$row['itemId'].";";
