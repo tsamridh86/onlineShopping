@@ -120,3 +120,5 @@ Now, all the if conditions are satisfied,
 
 if the name is unique, then the data obtained from the form in inserted into the database, then, session variables are intialized
 then, the user is logged it, each user is directed to it's appropiate page.
+
+5.sellerPage.php
