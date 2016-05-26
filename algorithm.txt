@@ -151,13 +151,25 @@ then, the user is logged it, each user is directed to it's appropiate page.
 
 	Below that, there is a dropdown menu, if a seller want to delete his approved items.
 
-		using select * from items where sellerId = $_SESSION['userId']
+		using select itemId, itemName from items where sellerId = $_SESSION['userId'] and status = 'Y'
 		will give the items sold by that seller only (the user can only be seller because other type of users are redirected away from this page)
+		again here fetch_assoc() is used to get the nessecary details in required format.
+		the while loop will continually display all the items related in proper format.
 
 		all the items are displayed in the dropdown menu,
 		If user chooses one option then, the itemId of that item will be sent to the same page
-		& will get deleted by using, "delete from items where itemId = $_POST['itemId'];
+		& will get deleted by using, "delete from items where itemId = $_POST['itemId']";
 
 	The last div simply shows all the orders that have been requested,
-	
+	This is done by using the orders table instead, upon joining the orders table with the items table w.r.t. it's itemId, then
+	we can obtain all the details of the item, however, all the names of the users are stored inside the users table, so,
+	the users table is also joined into this new table, 
+	now, we have combination of 3 tables,
+
+	now, we display the customer name (select userName from users join table where custId = userId)
+		the price & the quantity of the item, the grand total is not stored in the database because
+		it is a derived attribute & hence storing it on the database is a wastage of space.
+	similarly a table of items on bid will be kept on display, showing the latest bidder & the peak price.
+
+
 
