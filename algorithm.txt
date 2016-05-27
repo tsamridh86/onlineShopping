@@ -173,4 +173,41 @@ then, the user is logged it, each user is directed to it's appropiate page.
 
 
 6. adminpage.php
-	This page just shows stats for the most part
+	This page just shows stats for the most part. 
+	The first few lines are to redirect away any unwanted users that are not admins, then using config.php we connect to the 
+	database. The first if condition will only run if the admin has approved of any item in the form below. The approval is 
+	simple, when we get a approve click, we send the id of the item in a hidden manner, & then perform:
+		update items set status = 'Y' where itemId = $_POST['itemId']
+		(also note that this if condition wll not work when we first enter the page).
+
+	line no 31 to 43 are all about extracting each data from all the tables.
+	44-48 are used to count the number of rows that we get, so that they can be used to show the stats on the top left of the page
+	line 50 - 73 is used to display the stats box, all the data for it comes from the line 44-48,
+	also, items on sale was not extracted seperately, because :
+		total items = no.of items on sale + no of items on bid.
+		Since, we already have 2 values, there is no need to run an extra query for the 3rd one.
+
+	Next section is for the item waiting for approval:
+		It is simple to know the unapproved items, they have the status = 'N',
+		so, select * from items where status = 'N' does the trick,
+		all the values are retrieved & shown inside a div from line 78-116.
+		There is a form inside too, the form exists here because, it is used to transfer the itemid (in hidden input) to
+		the page itself, so that when someone clicks on approve, the if condition on line 24 is activated &
+		approves the item.
+
+	The next section is to display all the approved items on the database:
+		Contrary to above, this can be done by, select * from items where status = 'Y';
+		Similar div as above is used to display all the approved items form line no 126 to 162.
+
+	The next section is to display all the users in the database:
+		query : select * from users.
+		Here, the users attributes are shown in table format, hence there is no div inside the while loop on line 165-187
+
+	The final section is for the orders on the database, this requires some joins because :
+		orders(itemId,custId, quantity) are the only attribute inside the orders table,
+		hence, when we join orders & items table w.r.t. itemId, then we can retrive itemName & sellerId,
+		from this joint table, if we join users on it, w.r.t. userId = custId,
+		we retrive the name of the customer & for the seller, inside the while loop, we run:
+		select * from users where userId = sellerId.
+
+		All of the data obtained from the above queries are displayed in appropiate manner inside a table from line 229 to 253 
