@@ -414,6 +414,11 @@ then, the user is logged it, each user is directed to it's appropiate page.
 	if(!empty($_GET['type']))
 		$que = $que."type = '".$_GET['type']."' and ";
 
+	this comes from the sidebar
+	if(!empty($_GET['brand']))
+		$que = $que."brand = '".$_GET['brand']."' and ";
+
+
 	Now, any of the if conditions can run, or none of them may run,
 		if their conditions are satisfied, then the search query is extended otherwise it remains the same,
 
@@ -429,4 +434,5 @@ then, the user is logged it, each user is directed to it's appropiate page.
 
 	select * from items where color = 'black' and shape 'round' and category like 'men%' and category like '%sunglasses' and type = 'S'
 
+	now, we wrench off the un-needed and at the end, then
 	The generated query retreives the relevant information & then displays it to the user.
