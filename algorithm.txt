@@ -1,5 +1,8 @@
 This doc is for the #nettra :P project, i have assumed you know SQL,PHP, so i haven't explained baby details here.
 
+I know you wont read all this, use Ctrl + F to find the topic you want to know about lol.
+hit Ctrl + F then type in orderPage to read about it, reading all this is too much work.
+
 Some minor things(1):
 after using a select query, i have retreived the values in fetch_assoc() mode:
 eg. $que = "select * from users";
@@ -269,4 +272,39 @@ then, the user is logged it, each user is directed to it's appropiate page.
 	instead, but because there is a \' in $row['imgLoc'] it caused a syntax error, hence to fix it, $locs was used as an 
 	extra variable.
 
+8.orderComplete
+	This starts by verifying whether the customer is still logged in, if not, then it is redirected away.
+	Now, we recieved the itemId & the quantity if the item was on sale & we recieved the newPrice named as quantity
+	if the item was placed on the bid.
+
+	So, we retireve the data on the item again, & then
+		if the item was on sale, then:
+		insert the item into the orders table 
+
+		--inserting into orders table.
+
+		orders(orderid , itemId ,   custId,    quantity)
+				^			^		  ^	         ^
+			automatic    $_POST   $_SESSION    $_POST['quantity']
+			increment  ['itemId']	['userType']
+
+		so the query :
+
+		$order = "insert into orders (custId,itemId,quantity) values (".$_SESSION['userId'].",".$_POST['itemId'].",".$_POST['quantity'].");";
+		
+		explains itself.
+
+	Now, if the item was on a bid, we do not place it inside the orders table at all.
+	Firstly, we check whether the input we recieved from the other page, (ie, quantity) has a larger value than that of the previous bid.
+		This is acheived by the if condition on line no 52.
+	If the newPrice(renamed as quantity for minimization purpose) is greater than the old price then,
+	 change it's price in the items table & add the custId to it.
+		(adding the custId now, shows the id of the latest bidder, which inturn can be used to retrieve the name).
+
+	This can be done by the update query:
+"update items set custId = ".$_SESSION['userId']." , price = ".$_POST['quantity']." where itemId = ".$_POST['itemId'].";";
+								^									^										^
+							latest bidder						newPrice								item to be updated
+
+	In the end, the data is displayed again, as a reciept formaility thing so that it can be understood that the customer has brought the item.
 
