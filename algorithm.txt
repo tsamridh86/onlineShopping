@@ -211,3 +211,62 @@ then, the user is logged it, each user is directed to it's appropiate page.
 		select * from users where userId = sellerId.
 
 		All of the data obtained from the above queries are displayed in appropiate manner inside a table from line 229 to 253 
+
+7.orderPage.php
+
+	Since, a customer may only place an order, any other user, (usually the ones that are not logged in) are requested to signUp 
+	or login before they can proceed any further in the page.
+	If, the userType = 'C', (ie customer), all the details of the items are redisplayed on the screen again, for a review,
+	also, this data is obtained from search.php or directly from the now trending of the welcomePage.
+
+	From the search page, we are sent the itemId of the item that the user wants to buy,
+	then the details of the items can be obtained by the query :
+
+	"select * from items where itemId = "$_GET['itemId'];
+
+	after obtaining the details of the items, we use fetch_assoc() (this time it's used without a while loop because 
+	we want to show only one item & only itemID is the primary key, hence only one result can be generated, so why use a loop? lol)
+
+	also the query in line 44 is used to take retrive the name of the seller because, we only have the sellerId in the items table
+	hence, we have to show the customers the name of the seller, it's pointless to show them sellerId.
+
+	category was concatenated eariler in sellerPage,
+	hence we seperate it out, here, ( _ is the divider that shows that the 2 strings are different)
+
+	--category seperation algorithm:
+	len = 0;
+	while($row['category'][$len++]!="_");			<-- detects where the _ is in the string
+	$cat1 = substr($row['category'],0,$len-1);		<-- chops off the part before the _ , 0 to $len-1(there are 3 parameters here)
+	$cat2 = substr($row['category'],$len);			<-- chops off the after after the _ , $len to infinite (there are only 2 parameter in this line, note that)
+
+	after seperating it out, we check whether the item was on a bid, or it was on sale & appropiately change the display.
+
+	Keep in mind the we only send the variables quantity & itemId to the orderComplete page.
+
+		Now, some minor tricks that was used:
+		1. an item can either be on sale or on a bid.
+		2. if an item is on sale, we send it's quantity & itemId to the orderComplete page.
+		3. if am item is on bid, we send it's newPrice & itemId to the orderComplete page.
+		4. both quantity & newPrice are input type = number.
+
+			Here, itemId has to be sent in both cases, it is sent away in hidden format, because the customer does not need to 
+			know itemId & stuff.
+
+			Since, either quantity or newPrice is sent one at a time, we send only one variable to the other page.
+			(ki quantity pathunxau ya newPrice, bekar ma extra variable baunune ko satta euta mai pathae better)
+
+		So, if the item is on sale , we send the quantity as name = quantity to the other page
+		& if the item is on bid, we send the newPrice as name = quantity to the other page, hence minimizing the thing.
+
+	after we display it on the screen, there no fancy algorithm here on out, display was adjusted by trail & error.
+	
+	Note:  --image renaming note
+	at line 57, $locs = $row['imgLoc'] was done because at line 59,
+	we display the image as :
+		echo "<img src = '$locs' height = 500 px width = 500px align = left>";
+	Now, this can also be done as :
+		echo "<img src = '$row['imgLoc']' height = 500 px width = 500px align = left>";
+	instead, but because there is a \' in $row['imgLoc'] it caused a syntax error, hence to fix it, $locs was used as an 
+	extra variable.
+
+
