@@ -308,3 +308,125 @@ then, the user is logged it, each user is directed to it's appropiate page.
 
 	In the end, the data is displayed again, as a reciept formaility thing so that it can be understood that the customer has brought the item.
 
+9. welcomePage
+
+	This the first page of the project, we also assume that the execution of the code begins from here.
+
+	There is a div on the top left, this is for the shop logo. Which is not my problem.
+
+	Beside is a search bar : 
+		This search bar is a simple <input type = text name = query > made fancy with a bunch of css.
+		Then the magnifying glass beside is also <input type = submit> made fancy with a chunk of css.
+		The query typed in this search bar is inside a form that redirects into the search page.
+
+			(To search for search page algorithm : search : --search page algorithm)
+		Keep in mind that this search bar can only be used to search the items according to their itemName attribute
+		this will not work for other attributes.
+
+	Below it is navigational bar, they are all buttons in a unordered list & made horizontal by css property:
+		display: inline-block;
+		the buttons also look more fancy because of CSS.
+	The dropdown menu is another ul inside the li of the main ul.
+		This however is hidden by using the css property : display : hidden, & when we hover over it, we change it's 
+		settings to display : block;
+	Each button is named as cat & has the value like men_sunglasses or women_eyeglasses etc that are sent to the search page.
+	The last column is an exception to this as it searches for items that are either on bid or on sale so hence, it's name 
+	has to be type, so that it can be searched acc to type attribute.
+
+	Below this is a banner, set up by ever conventional trial & error.
+	Then, there comes the now trending tab:
+
+	--now trending algorithm
+		Now Trending items are the items are most bought by the customers. Hence to find such an item, we refer to the 
+		orders table as they have the quantity purchased property.
+
+	to find the total quantity: we use sum(quantity), 
+	now, we need to find total quantity of the item brought : so , sum(quantity) group by itemId
+	to see the 3 most trending things, we sort it in descending order : sum(quantity) group by itemId order by sum(quantity) desc
+
+	this explains the query inside the bracket in line no 116.
+	now, we need the details of the item, so we join it with items to retrive all it's details, & we need to sort it again.
+
+	Since, sorting once is better than sorting twice, the order by is removed from the inner query & placed outside.
+	The form leads to orderPage because we give the customer the ability to buy the items from the now trending tab itself.
+
+	Note that the sum(quantity) attribute has been renamed to q so that, SQL understands it as a row rather than a function again.
+
+	All of this is displayed in a div using the same method as used in adminPage.
+
+10. search page:
+	The search page gets it's queries / filter from welcomePage & search page itself:
+		Here, we first create the sidebar that shows various filters: (line 40 to 60 is explained litter later)
+
+	we extract all the shapes that are in the database by select distinct shape from items.
+		(distinct is used so that if 2 items have the same shape, the same shape is repeated in screen)
+	display it,
+	similarly, we display color, brand , seller in a similar manner, the category & type is fixed because there are only 
+	2 or 3 possible options, so we dont use a for loop.
+	All of these is in a form redirected to this page itself, they are also kept in get format so that it appears on the 
+	URL & it can be modified without needing to unnessicarily reload the page.
+
+	Now, for the search algorithm in line 40 
+
+	--search algorithm:
+	we only have to display the items that are approved by the admin, so 
+	firstly, we type in :
+	select * from items where status = 'Y'
+
+	now, there could be other search filters like color, shape etc.
+	So,
+
+	extend the query as :
+
+	$que = "select * from items where status = 'Y' and ";
+
+	if the user has searched by item name: ( from the welcomePage)
+	if(!empty($_GET['query']))
+		$que = $que."itemName like '%".$_GET['query']."%' and ";
+
+		add one more condition to search similar names, by simply concating it.
+
+	if the shape radio button has been clicked then, extend it further by adding the condition
+	if(!empty($_GET['shape']))
+		$que = $que."shape = '".$_GET['shape']."' and ";
+
+	similarly for color
+	if(!empty($_GET['color']))
+		$que = $que."color = '".$_GET['color']."' and ";
+
+	this category comes from the side bar, ie men, women, kids
+	if(!empty($_GET['category1']))
+		$que = $que."category like '".$_GET['category1']."%' and ";
+
+	this comes form the side bar, ie eyeglasses & sunglasses
+	if(!empty($_GET['category2']))
+		$que = $que."category like '%".$_GET['category2']."' and ";
+
+	this comes from the navigational bar from the welcomePage
+	if(!empty($_GET['cat']))
+		$que = $que."category = '".$_GET['cat']."' and ";
+
+	this comes from the sidebar 
+	if(!empty($_GET['seller']))
+		$que = $que."sellerid = ".$_GET['seller']." and ";
+
+	this comes from the navigational bar & the side bar (both of the inputs have the name = type so no conflict)
+	if(!empty($_GET['type']))
+		$que = $que."type = '".$_GET['type']."' and ";
+
+	Now, any of the if conditions can run, or none of them may run,
+		if their conditions are satisfied, then the search query is extended otherwise it remains the same,
+
+	eg, 1 if the customers searches as color = black & sellerid = 5 then the query would be :
+
+	select * from items where color = 'black' and sellerId = 5;
+
+	eg 2 if customer searches for eyeglasses then:
+
+	select * from items where category like '%eyeglasses' 
+
+	eg 3 if the customer searches for the black round sunglasses for men  on sale then :
+
+	select * from items where color = 'black' and shape 'round' and category like 'men%' and category like '%sunglasses' and type = 'S'
+
+	The generated query retreives the relevant information & then displays it to the user.

@@ -60,6 +60,8 @@
 		$que = $que."sellerid = ".$_GET['seller']." and ";
 	if(!empty($_GET['type']))
 		$que = $que."type = '".$_GET['type']."' and ";
+	if(!empty($_GET['brand']))
+		$que = $que."brand = '".$_GET['brand']."' and ";
 
 	// Now that the query has been made, wrench off the unnessecary and that is hanging behind, note that there are 4 characters , and  the space, use substr to wrench it off
 	$que = substr($que,0,-4);
@@ -92,7 +94,15 @@
 	$sidebar = $connect->query($sidebar);
 	while($prop = $sidebar->fetch_assoc())
 			echo "<input name = 'color' type = 'radio' value = ".$prop['color'].">".$prop['color']."<br><br>";
-	
+
+	//brand of the item
+	echo "	Enter the brand of the item:<br><br>";
+	$sidebar = "select distinct brand from items where status = 'Y';";
+	$sidebar = $connect->query($sidebar);
+	while($prop = $sidebar->fetch_assoc())
+			echo "<input name = 'brand' type = 'radio' value = ".$prop['brand'].">".$prop['brand']."<br><br>";
+
+
 	//category1 of item
 	echo "	Enter the category of the item:<br><br>";
 	echo "<input type = 'radio' name = 'category1' value = 'men'>Men<br><br>";
