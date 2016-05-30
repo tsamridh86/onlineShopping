@@ -25,13 +25,20 @@ $res['autho'] = {A,C}
 dumy   attr     1st 2nd
 var    name     itr itr
 
+the 1st itr means that 1st iteration of the loop, similarly, if there 5 elements, the dummy variable will reach the 
+5th row in the 5th iteration of the loop.
+
+Keep in mind that you cannot jump to your result, or reset the dummy varaible to the desired position.
+Suppose, you are in the 3rd iteration of the loop & you want to access the 1st element again, this is not possible.
+Similarly, if you only want the 3rd row only, then you have to use the loop 3 times to reach that point.
+
 there are other methods of retrieving data too :
 here is some help : http://www.w3schools.com/php/php_mysql_select.asp
 
 
 Some other minor things(2):
 when using a form,
-<form method = "get" action = "somepage.html" enctype = "multiform/form-data">
+<form method = "post" action = "somepage.php" enctype = "multiform/form-data">
 	<input name = "lol" type = "text">
 	<input type = "file" name = "pic">
 	<select name = "t">
@@ -59,7 +66,12 @@ A form in php is used to move from one page to another along with some data in i
 	every input / select option must have a name to it, for it to be retreived on the other side.
 
 	for the above example,
-	after 
+	let's assume the user typed in a name, inserted an image & then selected the 2nd option & hit the submit button.
+	Then all of this data is available in the somepage.php as 
+	$_POST['lol'] , $_FILES['pics']['tmp_name'] , $_POST['t']
+		^				^								^
+ inserted name 		uploaded image 					 = 2 (because the value = 2 in the 2nd option)
+
 
 1. NLI.php
 	to make sure a user is logged out, we need to destroy it's sessions, however, it cannot be directly destroyed.
