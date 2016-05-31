@@ -73,6 +73,18 @@ A form in php is used to move from one page to another along with some data in i
  inserted name 		uploaded image 					 = 2 (because the value = 2 in the 2nd option)
 
 
+some minor things(3):
+-- use of sessions:
+sessions :  A session is a way to store information (in variables) to be used across multiple pages. 
+	This is stored on the server rather than on the client machine,
+	whenever we use, session_start(), we are able to create & use any amount of session variables.
+ Here, sessions are started immediately in most of the pages & 
+ 	$_SESSION['userName'] is used to store the name of user, ( generally used to display welcome userName at the top right)
+ 	$_SESSION['userType'] is used to check the authority of the user at the beginning of the page, for example at sellerpage
+ 	if a customer forcefully types in url, sellerPage.php then the user will be redirected away to the appropiate page.
+ 	$_SESSION['userId'] is used generally to fill up the table data, (this is very effective as whenever we insert into a 
+ 	table with the an active session, we can know who inserted the item or placed the order).
+
 1. NLI.php
 	to make sure a user is logged out, we need to destroy it's sessions, however, it cannot be directly destroyed.
 	Hence:
@@ -112,11 +124,11 @@ A form in php is used to move from one page to another along with some data in i
 
 3.loginpage
 
-when entering the loginPage the first time the if condition will not work anyway, so directly jump to the form far below in the page. The form is rather simple, you'll understand it
+when entering the loginPage the first time the if condition on line 2 will not work anyway, so directly jump to the form far below in the page. The form is rather simple, you'll understand it
 
 After suitable values have been kept inside the form, it redirects to itself,
 now the both the values of the if conditions are satisfied,
-since the userName is unique, is search for that person & brings up his/her details (the select command brings up the details)
+since the userName is unique, we search for that person & brings up his/her details (the select command brings up the details)
 it checks it with the input given, if correct then
 sessions are started,
 session variable ( user-defined) userType , userName & userId are created & given appropiate values
