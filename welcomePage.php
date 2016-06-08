@@ -91,8 +91,8 @@
 </div>
 
 
-<div style='position: relative; top : 420px; left:10px; '>
-	<input type="submit" value="" style="border-style: none; background: url('trend.jpg') no-repeat; width: 450px; height: 120px; background-size: 100% 100%;">
+<div style='position: relative; top : 420px; left:10px; width: 40%;'>
+	<input type="submit" value="" style="border-style: none; background: url('trend.jpg') no-repeat; width: 450px; height: 120px; background-size: 100%;">
 	<?php
 		//connect to the database & stuff
 		require 'config.php';
@@ -135,7 +135,7 @@
 		$sellerName = $sellerName->fetch_assoc();
 		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
 		
-		echo "<div style='position: relative; height : 300px; width : 50%; top: 10px; left : 1px; border:2px solid grey; margin: 10px; '>";
+		echo "<div style='position: relative; height : 300px; width : 100%; top: 10px; left : 1px; border:2px solid grey; margin: 10px; '>";
 		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
 		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
 		echo "</div>";
@@ -148,6 +148,63 @@
 		echo "<p> Category : ".$cat1."</p>";
 		echo "<p> Category : ".$cat2."</p>";
 		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
+		echo "</div>";
+		echo "</div>";
+			
+		}
+		echo "</form>";
+		$connect->close();
+	?>
+</div>
+
+<div style='position: relative; top: -320px; right:-50%; width: 40%;'>
+	<h1> biddings </h1>
+	
+	<?php
+		//connect to the database & stuff
+		require 'config.php';
+		
+
+
+		$que = "select * from items where custId is not null or type = 'B';";
+		$result = $connect->query($que);
+		$count = 0;
+		echo "<form method = get action = 'orderPage.php'>";
+		while ($row = $result->fetch_assoc() and $count < 3)
+		{
+			$count = $count + 1;
+			
+		$locs = $row['imgLoc'];		//since the array name has '' the things got complex
+		
+		//category seperation tarika
+		$len = 0;
+		while($row['category'][$len++]!="_");
+		$cat1 = substr($row['category'],0,$len-1);
+		$cat2 = substr($row['category'],$len);
+		
+		//we only have the seller id of the person, this query is used to display it's actual name.
+		$sellerName = "select userName from users where userId = ".$row['sellerId'].";";
+		$sellerName = $connect->query($sellerName);
+		$sellerName = $sellerName->fetch_assoc();
+		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
+		
+		echo "<div style='position: relative; height : 330px; width : 100%; top: 10px; left : 1px; border:2px solid grey; margin: 10px; '>";
+		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
+		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
+		echo "</div>";
+		echo "<div style='position: absolute; top: 10px; left: 270px;'>";
+		echo "<p> Sold By  : ".$sellerName['userName']."</p>";
+		echo "<p> Color : ".$row['color']."</p>";
+		echo "<p> Shape : ".$row['shape']."</p>";
+		echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
+		echo "<p> Price  : ".$row['price']."</p>";
+		echo "<p> Category : ".$cat1."</p>";
+		echo "<p> Category : ".$cat2."</p>";
+		$que = "select userName from items inner join users on items.custId = users.userId where itemId = ".$row['itemId'].";";
+			$custName = $connect->query($que);
+			$custName = $custName->fetch_assoc();
+			echo "<p> Latest Bidder : ".$custName['userName']."</p>";
+		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Bid</button>";
 		echo "</div>";
 		echo "</div>";
 			
