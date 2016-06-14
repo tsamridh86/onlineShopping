@@ -45,7 +45,7 @@
 	//searching part here
 	$que = "select * from items where status = 'Y' and ";
 	if(!empty($_GET['query']))
-		$que = $que."itemName like '%".$_GET['query']."%' and ";
+		$que = $que."itemName like '%".$_GET['query']."%' or brand like '%".$_GET['query']."%' and ";
 	if(!empty($_GET['shape']))
 		$que = $que."shape = '".$_GET['shape']."' and ";
 	if(!empty($_GET['color']))
