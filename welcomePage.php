@@ -86,6 +86,20 @@
 <?php
 	//connect to the database & stuff
 	require 'config.php';
+
+	//immediately update the items on the database and disable the ones that should not be here
+	$que = "select * from items where type = 'B' and status = 'Y';";
+	$res = $connect->query($que);
+	while($row = $res->fetch_assoc())
+	{
+		if($row['deadLine'] <= $_SERVER['REQUEST_TIME'])
+		{
+			$ups = "update items set status = 'D' where itemId = ".$row['itemId'];
+			$connect->query($ups);
+			$ups = "insert into orders(custId, itemId, quantity) values (".$row['custId'].",".$row['itemId'].",1);";
+			$connect->query($ups);
+		}
+	}
 	/*
 		Since, now trending item is the item that has been ordered maximum times by the customers,
 		the query select itemId , sum(quantity) as q from orders group by itemId,
@@ -104,8 +118,8 @@
 	$result = $connect->query($que);
 	$count = 0;
 	echo "<form method = get action = 'orderPage.php'>";
-		while ($row = $result->fetch_assoc() and $count < 3)
-		{
+	while ($row = $result->fetch_assoc() and $count < 3)
+	{
 			$count = $count + 1;
 			
 				$locs = $row['imgLoc'];		//since the array name has '' the things got complex
@@ -123,41 +137,40 @@
 		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
 		
 		echo "<div style='position: relative; height : 300px; width : 100%; top: 10px; left : 1px; border:2px solid grey; margin: 10px; '>";
-			echo "<div style='position: absolute; top: 10px; left: 10px;'>";
-				echo "<img src = '$locs' height = 220 px width = 220px align = left>";
-			echo "</div>";
-			echo "<div style='position: absolute; top: 10px; left: 270px;'>";
-				echo "<p> Sold By  : ".$sellerName['userName']."</p>";
-				echo "<p> Color : ".$row['color']."</p>";
-				echo "<p> Shape : ".$row['shape']."</p>";
-				echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
-				echo "<p> Price  : ".$row['price']."</p>";
-				echo "<p> Category : ".$cat1."</p>";
-				echo "<p> Category : ".$cat2."</p>";
-				echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
-			echo "</div>";
+		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
+		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
+		echo "</div>";
+		echo "<div style='position: absolute; top: 10px; left: 270px;'>";
+		echo "<p> Sold By  : ".$sellerName['userName']."</p>";
+		echo "<p> Color : ".$row['color']."</p>";
+		echo "<p> Shape : ".$row['shape']."</p>";
+		echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
+		echo "<p> Price  : ".$row['price']."</p>";
+		echo "<p> Category : ".$cat1."</p>";
+		echo "<p> Category : ".$cat2."</p>";
+		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
+		echo "</div>";
 		echo "</div>";
 			
-		}
+	}
 	echo "</form>";
 	
 ?>
 </div>
-<div style='position: relative; top: -320px; right:-50%; width: 40%;'>
+<div style='position: relative; top: -0px; right:-50%; width: 40%;'>
 <h1> biddings </h1>
 
 <?php
-	//connect to the database & stuff
 	
-	$que = "select * from items where custId is not null or type = 'B' and status = 'Y' ;";
+	
+	$que = "select * from items where type = 'B' and status = 'Y' ;";
 	$result = $connect->query($que);
 	$count = 0;
 	echo "<form method = get action = 'orderPage.php'>";
-		while ($row = $result->fetch_assoc() and $count < 3)
+	while ($row = $result->fetch_assoc() and $count < 3)
 		{
 			$count = $count + 1;
-			
-				$locs = $row['imgLoc'];		//since the array name has '' the things got complex
+			$locs = $row['imgLoc'];		//since the array name has '' the things got complex
 		
 		//category seperation tarika
 		$len = 0;
@@ -171,24 +184,25 @@
 		$sellerName = $sellerName->fetch_assoc();
 		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
 		
-		echo "<div style='position: relative; height : 330px; width : 100%; top: 10px; left : 1px; border:2px solid grey; margin: 10px; '>";
-			echo "<div style='position: absolute; top: 10px; left: 10px;'>";
-				echo "<img src = '$locs' height = 220 px width = 220px align = left>";
-			echo "</div>";
-			echo "<div style='position: absolute; top: 10px; left: 270px;'>";
-				echo "<p> Sold By  : ".$sellerName['userName']."</p>";
-				echo "<p> Color : ".$row['color']."</p>";
-				echo "<p> Shape : ".$row['shape']."</p>";
-				echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
-				echo "<p> Price  : ".$row['price']."</p>";
-				echo "<p> Category : ".$cat1."</p>";
-				echo "<p> Category : ".$cat2."</p>";
-				$que = "select userName from items inner join users on items.custId = users.userId where itemId = ".$row['itemId'].";";
-					$custName = $connect->query($que);
-					$custName = $custName->fetch_assoc();
-					echo "<p> Latest Bidder : ".$custName['userName']."</p>";
-				echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Bid</button>";
-			echo "</div>";
+		echo "<div style='position: relative; height : 380px; width : 100%; top: 10px; left : 1px; border:2px solid grey; margin: 10px; '>";
+		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
+		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
+		echo "</div>";
+		echo "<div style='position: absolute; top: 10px; left: 270px;'>";
+		echo "<p> Sold By  : ".$sellerName['userName']."</p>";
+		echo "<p> Color : ".$row['color']."</p>";
+		echo "<p> Shape : ".$row['shape']."</p>";
+		echo "<p> Item Name : ".$row['brand']." ".$row['itemName']."</p>";
+		echo "<p> Price  : ".$row['price']."</p>";
+		echo "<p> Category : ".$cat1."</p>";
+		echo "<p> Category : ".$cat2."</p>";
+		$que = "select userName from items inner join users on items.custId = users.userId where itemId = ".$row['itemId'].";";
+		$custName = $connect->query($que);
+		$custName = $custName->fetch_assoc();
+		echo "<p> Latest Bidder : ".$custName['userName']."</p>";
+		echo "<p> Time remaining : ".calcTime($row['deadLine'])."</p>";
+		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Bid</button>";
+		echo "</div>";
 		echo "</div>";
 			
 		}

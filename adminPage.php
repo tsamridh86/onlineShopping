@@ -155,6 +155,7 @@
 			$custName = $connect->query($que);
 			$custName = $custName->fetch_assoc();
 			echo "<p> Latest Bidder : ".$custName['userName']."</p>";
+			echo "<p> Time remaining : ".calcTime($row['deadLine'])."</p>";
 		}
 		echo "</div>";
 		echo "</div>";
@@ -224,7 +225,7 @@
 		echo "</table></div>";
 
 		//This div is for all the bids on the page
-		$que = "select items.price , users.userName , items.itemName, items.sellerId from items inner join users on users.userId = items.custId where type = 'B'";
+		$que = "select items.price , users.userName , items.itemName, items.sellerId , items.deadLine from items inner join users on users.userId = items.custId where type = 'B'";
 		$result = $connect->query($que);
 		echo "
 				<div style = 'height: 300px; overflow:auto;'>
@@ -234,6 +235,7 @@
 						<td>Customer Name </td>
 						<td>Seller Name</td>
 						<td>Item Name</td>
+						<td>Time Remaining</td>
 						<td>Latest Price</td>
 					</tr>
 				";
@@ -246,6 +248,7 @@
 						<td>".$row['userName']."</td>
 						<td>".$que['userName']."</td>
 						<td>".$row['itemName']."</td>
+						<td>".calcTime($row['deadLine'])."</td>
 						<td>".$row['price']."</td>
 				 	</tr>	";
 		}

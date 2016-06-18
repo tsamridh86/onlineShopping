@@ -27,15 +27,8 @@
 		if($hrs) $str = $str.$hrs." hours ";
 		if($min) $str = $str.$min." minutes ";
 		if($sec) $str = $str.$sec." seconds ";
-		$str = $str."remaining.";
 		return $str;
 	}
-
-
-
-
-
-
 
 	//This portion is for the connection to the database & to activate the $connect variable as a link	
 		//connect to the server
@@ -70,4 +63,5 @@
 		*/
 		$que = "create table if not exists orders ( orderId int primary key auto_increment, custId int references users(userId) , itemId int references items(itemId) on delete set null, quantity int );";
 		$connect->query($que);
+
 ?>

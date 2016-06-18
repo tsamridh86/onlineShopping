@@ -6,8 +6,15 @@ modifications done on :
 3. searchPage.php --> added brandwise searching in the search bar, extended the display for time remaining
 4. sellerPage.php --> ability to add deadline for bidding items.(deadline can be added to selling items also, but it would have no effect.)
 5. orderPage.php --> extended to display the time remaining.
+6. adminPage.php --> adjusted the display for time remaining.
+
+at line number 91 there is a code to check whether the outdated item is still being displayed in the screen & hence appropiate measures are taken to remove it
+
 
 the items on bid have a deadLine attribute to them, basically, this when no other customer can bid for that product and that product will be ordered with quantity 1.
 
 also, since the product needs to stop circulation after the deadLine is complete, it's status will be automatically alloted as D that is the deactivated state, i.e., the product will remain inside the server but it cannot be accessed anymore.
-	(When the admin approves of the product, it's status changes from N to Y, so reverting it back to N is also an option, but sincem thw query we use for unapproved items uses select * bla bla bla where status = 'N'. This forces us to use a new status D.)
+	(When the admin approves of the product, it's status changes from N to Y, so reverting it back to N is also an option, but since the query we use for unapproved items uses select * bla bla bla where status = 'N'. This forces us to use a new status D.)
+
+	query run:
+	alter table items add column deadLine int default NULL
