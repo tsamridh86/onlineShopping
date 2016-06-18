@@ -4,7 +4,8 @@ modifications done on :
 1. config.php	--> extended the items table and added a time calculating function.
 2. welcomePage.php	--> extended the now trending table, added the bidding side by side.
 3. searchPage.php --> added brandwise searching in the search bar, extended the display for time remaining
-4. sellerPage.php --> ability to add deadline for bidding items.
+4. sellerPage.php --> ability to add deadline for bidding items.(deadline can be added to selling items also, but it would have no effect.)
+5. orderPage.php --> extended to display the time remaining.
 
 the items on bid have a deadLine attribute to them, basically, this when no other customer can bid for that product and that product will be ordered with quantity 1.
 

@@ -13,13 +13,13 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	//unauthorized users will be redirected from this page.
 	if(empty($_SESSION['userType'])) header("location:welcomePage.php");
 	if($_SESSION['userType']=='C') header("location:welcomePage.php");
-	
+	require 'config.php';
 	//this is to avoid the execution of adding into the database if everything is ready
 	if(!empty($_POST['itemName']) && !empty($_POST['price']) && !empty($_POST['brand'])&& is_uploaded_file($_FILES['image']['tmp_name']) && !empty($_POST['category1']) && !empty($_POST['category2']) && !empty($_POST['shape']) && !empty($_POST['color']))
 	{
 		//connect to the database & check whether as table exists for users
 		//some one may try login without the execution of the user table existence.
-		require 'config.php';
+		
 		//import image to the server page
 		$file_temp = $_FILES['image']['tmp_name'];
 		$file_name = $_FILES['image']['name'];
@@ -31,34 +31,29 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		{
 			if(!$i) //if($i ==0) this is used if there is only one copy
 			$file_name = substr($file_name,0,-4).$i.substr($file_name, -4);
-			else 	//this is used if there is more than one copy available
+				else 	//this is used if there is more than one copy available
 				$file_name = substr($file_name,0,-5).$i.substr($file_name, -4);
 			$i++;
 		}
-		$i = 0 ; 	//reset the value for i, since the loop has already run it's course.
-		move_uploaded_file($file_temp,"images/".$file_name);	//this uploads it into the server
-
-
-
+			$i = 0 ; 	//reset the value for i, since the loop has already run it's course.
+			move_uploaded_file($file_temp,"images/".$file_name);	//this uploads it into the server
 		//combining categories
 		$category = $_POST['category1']."_".$_POST['category2'];
-
 		$deadLine = NULL;
 		//there are two submit buttons, that determines whether it is to be kept on Bidding or sale, so
-		if($_POST['type']=='Keep On Bidding') 
+		if($_POST['type']=='Keep On Bidding')
 			{
 				$type = 'B';
 				if(!empty($_POST['deadLine']))
 					$deadLine = strtotime($_POST['deadLine']);
 			}
 		else
-		 $type = 'S';
-
+		$type = 'S';
 		//insert into the table
 		$ins = "insert into items (brand,itemName,sellerId,price,category,shape,color,imgLoc,type,deadLine) values ('".$_POST['brand']."','".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$category."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."',".$deadLine.");";
 		$connect->query($ins);
 		echo "Please wait for the admin approval.";
-		$connect->close();
+		
 	}
 ?>
 <!-- This division is for the items that are going to be added to database -->
@@ -138,8 +133,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 <select name = 'toDelete'>
 <option value = 'none'>--Select an item to delete--</option>
 <?php
-	//gotta reconnect to the database, because this section is optional, & hence may not be used, when unused the connectivity remains disconnect so no risking here
-	require 'config.php';
+	
 	// now, to actually display the things inside here to the seller
 	$que = "select itemId, itemName from items where sellerId =".$_SESSION['userId']." and status = 'Y';";
 	$result = $connect->query($que);
@@ -147,7 +141,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	{
 		echo "<option value = ".$row['itemId'].">".$row['itemName']."</option>";
 	}
-	$connect->close();
+	
 ?>
 </select>
 <input type="submit" value="delete">
@@ -155,14 +149,14 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 <?php
 	if(!empty($_GET['toDelete']))
 	{
-		require 'config.php';
+		
 		//Now to actually delete the item from the items table
 		$que = "delete from items where itemId = ".$_GET['toDelete'].";";
 		$connect->query($que);
 		//it also has to be removed from the orders so
 		$que = "delete from orders where itemId = ".$_GET['toDelete'].";";
 		$connect->query($que);
-		$connect->close();
+		
 		echo "Successfully deleted.";
 	}
 ?>
@@ -170,8 +164,8 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 <!-- This is for the the items that the seller has to deliver to various people -->
 <div style="position: relative;margin: 10px; border: 2px solid black; width: 50%; top : 10px;left: 10px; padding: 10px;">
 <?php
-	//connect to the database and stuff
-	require 'config.php';
+	
+	
 	//the objective here is to display what items needs to delievered to what person in what quantity
 	//so using the natural join between items, orders and users, we can obtain all of this
 	//there is no need to create user table if not exists, you would not be in this page if you were not a seller lol
@@ -191,13 +185,13 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 			// The value of grand total is not stored in database because it is a derived attribute & hence causes a wastage of space.
 	while($row = $result->fetch_assoc())
 	{
-																	echo "	<tr>
+			echo "	<tr>
 					<td>".$row['userName']."</td>
 					<td>".$row['itemName']."</td>
 					<td>".$row['quantity']."</td>
 					<td>".$row['price']."</td>
 					<td>".($row['quantity']*$row['price'])."</td>
-																			</tr>	";
+					</tr>	";
 	}
 	echo "</table>";
 	//this is for the items that are for bidding
@@ -213,11 +207,11 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 			// The value of grand total is not stored in database because it is a derived attribute & hence causes a wastage of space.
 	while($row = $result->fetch_assoc())
 	{
-																	echo "	<tr>
+		echo "	<tr>
 					<td>".$row['userName']."</td>
 					<td>".$row['itemName']."</td>
 					<td>".$row['price']."</td>
-																			</tr>	";
+					</tr>	";
 	}
 	echo "</table>";
 	$connect->close();

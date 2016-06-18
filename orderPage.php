@@ -68,7 +68,10 @@
 		if ($row['type']=='S')
 		echo "<p> Quantity : <input type = number name = 'quantity' > </p>";
 		else 
+		{
 			echo "<p> Bid a price for this item : <input type = 'number' name = 'quantity'></p>";
+			echo "<p> Time remaining : ".calcTime($row['deadLine'])."</p>";
+		}
 		echo "<input type = hidden name = 'type' value = ".$row['type'].">";	//the type of the item must be sent discreetly
 		echo "<button type = submit name = 'itemId' value =".$row['itemId'].">Order</button>";
 		echo "</div>";

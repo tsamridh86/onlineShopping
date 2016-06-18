@@ -15,11 +15,11 @@
 		$yrs = floor($dum);						//removed the decimal part if any
 		$dum = (($dum - $yrs)*365);				//converted into days
 		$days = floor($dum);					//removed the decimal part if any
-		$dum = (($dum-$days)*24)				//converted into hrs
+		$dum = (($dum-$days)*24);				//converted into hrs
 		$hrs = floor($dum);						//removed the decimal part if any
-		$dum = (($dum-$hrs)*60)					//converted into mins
+		$dum = (($dum-$hrs)*60);				//converted into mins
 		$min = floor($dum);						//removed decimals if any
-		$dum = (($dum-$min)*60)					//converted into seconds
+		$dum = (($dum-$min)*60);					//converted into seconds
 		$sec = floor($dum);						//removed decimals
 		$str = '';
 		if($yrs) $str = $str.$yrs." years ";
@@ -28,9 +28,7 @@
 		if($min) $str = $str.$min." minutes ";
 		if($sec) $str = $str.$sec." seconds ";
 		$str = $str."remaining.";
-
-
-
+		return $str;
 	}
 
 

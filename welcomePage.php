@@ -140,7 +140,7 @@
 			
 		}
 	echo "</form>";
-	$connect->close();
+	
 ?>
 </div>
 <div style='position: relative; top: -320px; right:-50%; width: 40%;'>
@@ -148,7 +148,6 @@
 
 <?php
 	//connect to the database & stuff
-	require 'config.php';
 	
 	$que = "select * from items where custId is not null or type = 'B' and status = 'Y' ;";
 	$result = $connect->query($que);
