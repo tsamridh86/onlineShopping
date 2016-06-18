@@ -3,6 +3,43 @@
 		The contents of this page are very important for the execution of the code in the other pages
 		a require command has been used in the nessecary pages to import this data if required.
 	*/
+
+	//This portion contains the function to calculate the time remaining and display the correct format
+	//The parameter $date is assumed to be in timestamp format that is the time is completely displayed in seconds.
+	function calcTime ($deadLine)
+	{
+		$currentDate  = $_SERVER['REQUEST_TIME'];
+		$timeRemaining = $deadLine - $currentDate;
+		if($timeRemaining <= 0) return 0;
+		$dum = $timeRemaining / (60*60*24*365);	//converted into years
+		$yrs = floor($dum);						//removed the decimal part if any
+		$dum = (($dum - $yrs)*365);				//converted into days
+		$days = floor($dum);					//removed the decimal part if any
+		$dum = (($dum-$days)*24)				//converted into hrs
+		$hrs = floor($dum);						//removed the decimal part if any
+		$dum = (($dum-$hrs)*60)					//converted into mins
+		$min = floor($dum);						//removed decimals if any
+		$dum = (($dum-$min)*60)					//converted into seconds
+		$sec = floor($dum);						//removed decimals
+		$str = '';
+		if($yrs) $str = $str.$yrs." years ";
+		if($days) $str = $str.$days." days ";
+		if($hrs) $str = $str.$hrs." hours ";
+		if($min) $str = $str.$min." minutes ";
+		if($sec) $str = $str.$sec." seconds ";
+		$str = $str."remaining.";
+
+
+
+	}
+
+
+
+
+
+
+
+	//This portion is for the connection to the database & to activate the $connect variable as a link	
 		//connect to the server
 		$connect = mysqli_connect("localhost","root","") or die ("Unable to connect to MySQL Sever.");
 		

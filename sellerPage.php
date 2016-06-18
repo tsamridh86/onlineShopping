@@ -31,19 +31,31 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		{
 			if(!$i) //if($i ==0) this is used if there is only one copy
 			$file_name = substr($file_name,0,-4).$i.substr($file_name, -4);
-					else 	//this is used if there is more than one copy available
+			else 	//this is used if there is more than one copy available
 				$file_name = substr($file_name,0,-5).$i.substr($file_name, -4);
 			$i++;
 		}
-				$i = 0 ; 	//reset the value for i, since the loop has already run it's course.
-				move_uploaded_file($file_temp,"images/".$file_name);	//this uploads it into the server
+		$i = 0 ; 	//reset the value for i, since the loop has already run it's course.
+		move_uploaded_file($file_temp,"images/".$file_name);	//this uploads it into the server
+
+
+
 		//combining categories
 		$category = $_POST['category1']."_".$_POST['category2'];
+
+		$deadLine = NULL;
 		//there are two submit buttons, that determines whether it is to be kept on Bidding or sale, so
-		if($_POST['type']=='Keep On Bidding') $type = 'B';
-		else $type = 'S';
+		if($_POST['type']=='Keep On Bidding') 
+			{
+				$type = 'B';
+				if(!empty($_POST['deadLine']))
+					$deadLine = strtotime($_POST['deadLine']);
+			}
+		else
+		 $type = 'S';
+
 		//insert into the table
-		$ins = "insert into items (brand,itemName,sellerId,price,category,shape,color,imgLoc,type) values ('".$_POST['brand']."','".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$category."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."');";
+		$ins = "insert into items (brand,itemName,sellerId,price,category,shape,color,imgLoc,type,deadLine) values ('".$_POST['brand']."','".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$category."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."',".$deadLine.");";
 		$connect->query($ins);
 		echo "Please wait for the admin approval.";
 		$connect->close();
@@ -85,7 +97,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		</tr>
 		<tr>
 			<td>Enter the deadline(for bidding):</td>
-			<td><input type = "date" name = "deadLIne" required></td>
+			<td><input type = "date" name = "deadLine"></td>
 		</tr>
 		<tr>
 		</tr>
@@ -179,13 +191,13 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 			// The value of grand total is not stored in database because it is a derived attribute & hence causes a wastage of space.
 	while($row = $result->fetch_assoc())
 	{
-				echo "	<tr>
+																	echo "	<tr>
 					<td>".$row['userName']."</td>
 					<td>".$row['itemName']."</td>
 					<td>".$row['quantity']."</td>
 					<td>".$row['price']."</td>
 					<td>".($row['quantity']*$row['price'])."</td>
-						</tr>	";
+																			</tr>	";
 	}
 	echo "</table>";
 	//this is for the items that are for bidding
@@ -201,11 +213,11 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 			// The value of grand total is not stored in database because it is a derived attribute & hence causes a wastage of space.
 	while($row = $result->fetch_assoc())
 	{
-				echo "	<tr>
+																	echo "	<tr>
 					<td>".$row['userName']."</td>
 					<td>".$row['itemName']."</td>
 					<td>".$row['price']."</td>
-						</tr>	";
+																			</tr>	";
 	}
 	echo "</table>";
 	$connect->close();
