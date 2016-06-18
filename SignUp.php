@@ -3,7 +3,6 @@
 	if (!empty($_POST['userName']) && !empty($_POST['password']) && !empty($_POST['repassword']) && $_POST['password']==$_POST['repassword'] && !empty($_POST['authority']))
 	{
 		require 'config.php';
-
 		//make sure that same userName does not exists, & if it does, simply warn the user.
 		$test = "select userName from users";
 		$allUsers = $connect->query($test);
@@ -31,12 +30,9 @@
 			else if ($_POST['authority'] == 'S')
 				header("location:sellerPage.php");
 		}
-		$connect->close(); 
+		$connect->close();
 	}
 ?>
-
-
-
 <form action = "signUp.php" method = "post">
 	<table>
 		<tr>
@@ -55,16 +51,15 @@
 			<td>Authority level : </td>
 			<td>
 				<select name = 'authority'>
-						<option value="C">Customer</option>
-						<option value="S">Seller</option>
-						<option value="A">Administrator</option>
+					<option value="C">Customer</option>
+					<option value="S">Seller</option>
+					<option value="A">Administrator</option>
 				</select>
 			</td>
 		</tr>
 		<tr>
 			<td><input type="submit" value="Sign Up" /></td>
 			<td><a href="welcomePage.php">Cancel</a></td>
-		</tr>		
+		</tr>
 	</table>
-
 </form>

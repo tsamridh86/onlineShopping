@@ -23,7 +23,6 @@
 	}
 ?>
 </div>
-
 <?php
 	//a non-user would be stopped here
 	if(empty($_SESSION['userType']))

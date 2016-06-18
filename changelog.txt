@@ -1,0 +1,10 @@
+changelog:
+
+modifications done on : 
+1. config.php	--> extended the items table and added a time calculating function.
+2. welcomePage.php	--> extended the now trending table, added the bidding side by side.
+
+the items on bid have a deadLine attribute to them, basically, this when no other customer can bid for that product and that product will be ordered with quantity 1.
+
+also, since the product needs to stop circulation after the deadLine is complete, it's status will be automatically alloted as D that is the deactivated state, i.e., the product will remain inside the server but it cannot be accessed anymore.
+	(When the admin approves of the product, it's status changes from N to Y, so reverting it back to N is also an option, but sincem thw query we use for unapproved items uses select * bla bla bla where status = 'N'. This forces us to use a new status D.)
