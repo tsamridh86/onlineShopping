@@ -189,7 +189,7 @@
 
 		//This division is for all the orders in the database
 		//this ain't gonna be a easy one
-		$que = "select * from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId where type = 'S'";
+		$que = "select * from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId ";
 		$result = $connect->query($que);
 		
 		echo "

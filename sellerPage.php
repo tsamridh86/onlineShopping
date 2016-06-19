@@ -171,7 +171,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	//there is no need to create user table if not exists, you would not be in this page if you were not a seller lol
 	//this is to only display the items that have been ordered
 	//this ain't gonna be a easy one
-	$que = "select userName, itemName , quantity, price from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId where sellerId = ".$_SESSION['userId']." and type = 'S' and status = 'Y';";
+	$que = "select userName, itemName , quantity, price from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId where sellerId = ".$_SESSION['userId'].";";
 	$result = $connect->query($que);
 	echo "<table width = 90% style = 'padding : 5px; margin : 5px;'>
 			<th> Items to be delievered </th>
@@ -195,14 +195,15 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	}
 	echo "</table>";
 	//this is for the items that are for bidding
-	$que = "select items.price , users.userName , items.itemName from items inner join users on users.userId = items.custId where sellerId = ".$_SESSION['userId']." and type = 'B' and status = 'Y';";
+	$que = "select items.price , users.userName , items.itemName, items.status from items inner join users on users.userId = items.custId where sellerId = ".$_SESSION['userId']." and type = 'B' and status = 'Y' or status = 'D';";
 	$result = $connect->query($que);
 	echo "<table width = 90% style = 'padding : 5px; margin : 5px;'>
 			<th> Current bidding prices</th>
 			<tr>
 				<td> Customer Name </td>
-				<td> Item to be delievered </td>
+				<td> Item Name </td>
 				<td> Current Price </td>
+				<td> Bidding Status </td>
 			</tr>";
 			// The value of grand total is not stored in database because it is a derived attribute & hence causes a wastage of space.
 	while($row = $result->fetch_assoc())
@@ -210,8 +211,10 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		echo "	<tr>
 					<td>".$row['userName']."</td>
 					<td>".$row['itemName']."</td>
-					<td>".$row['price']."</td>
-					</tr>	";
+					<td>".$row['price']."</td>";
+		if($row['status']=='Y') echo "<td>Open</td>";		
+		else echo "<td>Closed</td>";
+			echo "</tr>";
 	}
 	echo "</table>";
 	$connect->close();

@@ -22,7 +22,7 @@
 	</form>
 </div>
 <div style="position: absolute; top : 60px; right:1px;">
-	<input type="submit" value="" style="border-style: none; background: url('pic.jpg') no-repeat; width: 1495px; height: 300px; background-size: 100% 100%;">
+	<img style="border-style: none; background: url('pic.jpg') no-repeat; width: 1495px; height: 300px; background-size: 100% 100%;">
 </div>
 <!-- Login tab will only be displayed if there is no user logged in.
 & for a logged in user there will be a logout option -->
