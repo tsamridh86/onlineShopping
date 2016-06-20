@@ -20,6 +20,8 @@ also, since the product needs to stop circulation after the deadLine is complete
 	alter table items add column deadLine int default NULL;
 	update items set deadLine = 1466978400 where type = 'B' and deadLine = NULL;
 
+inside config.php
+extended the table items, it now has an attribute called deadline, that is NULL by default
 added a new function:
 calcTime($deadLine)
 	this functions calculates the time remaining to approach the deadline (given in the parameter) w.r.t the current date.
