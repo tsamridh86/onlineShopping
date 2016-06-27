@@ -39,18 +39,19 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 			move_uploaded_file($file_temp,"images/".$file_name);	//this uploads it into the server
 		//combining categories
 		$category = $_POST['category1']."_".$_POST['category2'];
-		$deadLine = NULL;
 		//there are two submit buttons, that determines whether it is to be kept on Bidding or sale, so
 		if($_POST['type']=='Keep On Bidding')
 			{
 				$type = 'B';
 				if(!empty($_POST['deadLine']))
 					$deadLine = strtotime($_POST['deadLine']);
+				$ins = "insert into items (brand,itemName,sellerId,price,category,shape,color,imgLoc,type,deadLine) values ('".$_POST['brand']."','".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$category."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."',".$deadLine.");";
 			}
 		else
+		{
 		$type = 'S';
-		//insert into the table
-		$ins = "insert into items (brand,itemName,sellerId,price,category,shape,color,imgLoc,type,deadLine) values ('".$_POST['brand']."','".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$category."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."',".$deadLine.");";
+		$ins = "insert into items (brand,itemName,sellerId,price,category,shape,color,imgLoc,type) values ('".$_POST['brand']."','".$_POST['itemName']."',".$_SESSION['userId'].",".$_POST['price'].",'".$category."','".$_POST['shape']."','".$_POST['color']."','"."images/".$file_name."','".$type."');";
+		}
 		$connect->query($ins);
 		echo "Please wait for the admin approval.";
 		

@@ -29,7 +29,7 @@
 		echo "You must be a customer to buy items, please sign up.";
 	//seller would be redirected
 	else if ($_SESSION['userType'] == 'S') header("location:sellerPage.php");
-	else if ($_SESSION['userType'] == 'C' && !empty($_GET['itemId']))
+	else if (($_SESSION['userType'] == 'C' || $_SESSION['userType'] == 'A' )&& !empty($_GET['itemId']))
 	{
 		//connect to the database & stuff
 		require 'config.php';
