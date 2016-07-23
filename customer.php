@@ -1,10 +1,10 @@
-<!DOCTYPE html>
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <!-- Optional theme -->
 <link rel="stylesheet" href="css/bootstrap-theme.min.css">
 <!-- Latest compiled and minifiedJavaScript -->
 <script src="jquery-1.9.1.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<!DOCTYPE html>
 <head>
 	<style type="text/css">
 		.list{
@@ -16,6 +16,7 @@
 <div style="position: absolute; top : -20px; left:10px;">
 	<img src="logo.jpg" class="img-circle" alt="cinque Terre" width="150" height="80">
 </div>
+
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <div class="container-fluid">
@@ -35,12 +36,11 @@
 				</div>
 			</form>
 		</div>
-		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 pull-right">
+<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 pull-right">
 			<?php
 			session_start();
-			if (empty($_SESSION['user']))
-			echo "<a href='signUp.php' class = 'login'><span class='glyphicon glyphicon-user' aria-hidden='true'> SignUp</span></a>
-				<a href='loginPage.php' class = 'login'><span class='glyphicon' aria-hidden='true'>| Login</span></a>";
+			if (empty($_SESSION['userType']))
+			header("location:welcomePage.php");
 			else if ($_SESSION['userType'] == 'S')
 			header("location:sellerPage.php");
 			else {
@@ -50,38 +50,6 @@
 			?>
 		</div>
 	</div>
-	<div id="myCarousel" class="carousel slide" data-ride="carousel">
-		
-		<div class="carousel-inner" role="listbox">
-			<div class="item active">
-				<img src="pic.jpg" alt="hy" width="1200" height="260">
-				<div class="carousel-caption">"
-					
-				</div>
-			</div>
-			<div class="item">
-				<img src="3.jpg" alt="hy" width="1200" height="260">
-				<div class="carousel-caption">
-					
-				</div>
-			</div>
-			<div class="item">
-				<img src="her.jpg" alt="hy" width="1200" height="260">
-				<div class="carousel-caption">
-					
-				</div>
-			</div>
-		</div>
-		<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-			<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-			<span class="sr-only">Next</span>
-		</a>
-		<a class="right carousel-control" href="#myCarousel" role="button" data-slide="prev">
-			<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-			<span class="sr-only">Next</span>
-		</a>
-	</div>
-	
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<form method="get" action = "search.php">
@@ -118,6 +86,10 @@
 			</form>
 		</div>
 	</nav>
+	<div style="container">
+	<img src="1.jpg" class="img-thumbnail" alt="Cinque Terre" width="1200" height="236">
+</div>
+
 	<div class="row" style="margin-bottom:20px;">
 		<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			<div class='row'>
@@ -280,15 +252,49 @@
 			echo " </div>";
 		}
 		echo "</form>";
-		$connect->close();
+		
 		?>
 	</div>
-	</div>	
-</div>
-</div>
-<div style="position: absolute; bottom: -1260; left:500px;">
+	</div>
+<div class='row' style="margin-bottom:20px;">
+	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	<blockquote>
+	<h4 class="heading"><span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span> Details:</h4>
+		<footer>This belongs to you!</footer>
+		</blockquote>
+	<?php
 
-<h4>We serve you for good</h4>
-<p><span class="glyphicon glyphicon-earphone"></span>  9830908989, 98511345678</p>
-<p><span class="glyphicon glyphicon-globe"> Dhulikhel, Kavre</span></p>
+$que="select * from orders where custId=".$_SESSION['userId'];
+$result = $connect->query($que);
+		
+		echo "
+				
+				<table class='table table-bordered'>
+					<tr>
+						<td>Order Id</td>
+				
+						<td>Item Name</td>
+						<td>Quantity</td>
+						<td>Price</d>
+						<td>Total</d>
+					</tr>
+				";
+
+		while($row = $result->fetch_assoc())
+		{
+			$itemDetails = "select * from items where itemId = ".$row['itemId'];
+			$itemDetails = $connect->query($itemDetails);
+			$itemDetails = $itemDetails->fetch_assoc();
+			echo "	<tr>
+						<td>".$row['orderId']."</td>
+						<td>".$itemDetails['brand']." ".$itemDetails['itemName']."</td>
+						<td>".$row['quantity']."</td>
+						<td>".$itemDetails['price']."</td>
+						<td>".$row['quantity']*$itemDetails['price']."
+						</tr>	";
+		}
+		echo "</table>";
+		$connect->close();
+?>
+</div>
 </div>

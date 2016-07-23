@@ -1,3 +1,10 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<!-- Latest compiled and minified
+JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <?php
 if (!empty($_POST['userName']) && !empty($_POST['password']))
 {
@@ -8,7 +15,7 @@ if (!empty($_POST['userName']) && !empty($_POST['password']))
 	$que = "select userId , userName , autho from users where userName = '".$_POST['userName']."' and pswd = '".$_POST['password']."';";
 	$result = $connect->query($que);
 	$res = $result->fetch_assoc();
-	if($res['autho'] == 'A')	//admin is da boss of the page, he shall have the might to remove other users & items.
+	if($res['autho'] == 'A')	
 	{
 		session_start();
 		$_SESSION['userType'] = 'A';
@@ -16,15 +23,15 @@ if (!empty($_POST['userName']) && !empty($_POST['password']))
 		$_SESSION['userId'] = $res['userId'];
 		header("location:adminPage.php");
 	}
-	else if ($res['autho'] == 'C')	//customers having the least power of them all, can only order the items.
+	else if ($res['autho'] == 'C')	
 	{
 		session_start();
 		$_SESSION['userType'] = 'C';
 		$_SESSION['userName'] = $res['userName'];
 		$_SESSION['userId'] = $res['userId'];
-		header("location:welcomePage.php");
+		header("location:customer.php");
 	}
-	else if ($res['autho'] == 'S')	//sellers will have the ability to add & remove items, that belong to them.
+	else if ($res['autho'] == 'S')	
 	{
 		session_start();
 		$_SESSION['userType'] = 'S';
@@ -33,26 +40,32 @@ if (!empty($_POST['userName']) && !empty($_POST['password']))
 		header("location:sellerPage.php");
 	}
 	else
-	{
-		echo "Sorry, you are not a registered user. <a href = 'signUp.php'>Click here</a> to sign up & join us. :D";
+	{   
+ 
+		echo "Sorry, you are not a registered user. <a href = 'signUp.php'>Click here</a> to sign up & join us. :)";
 	}
 }
 ?>
 
 
-<form action = "loginPage.php" method = "post">
-	<table>
-		<tr>
-			<td>Enter your User Name : </td>
-			<td><input type = "text" name = "userName"></td>
-		</tr>
-		<tr>
-			<td>Enter your Password : </td>
-			<td><input type = "password" name = "password"></td>
-		</tr>
-		<tr>
-			<td><input type="submit" value="Log In" /></td>
-			<td><a href="welcomePage.php">Cancel</a></td>
-		</tr>
-	</table>
-</form>
+<div class="container">
+  <form method = "post" action = loginPage.php>
+    <div class="form-group">
+	<label for="userName">Username:</label>
+      <input type="text" class="form-control" name="userName" placeholder="Enter name">
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" class="form-control" name="password" placeholder="Enter password">
+	  <p class="warning">The password must be 1-25 characters long.</p>
+    </div>
+	
+    <div class="checkbox">
+      <label><input type="checkbox"> Remember me</label>
+    </div>
+    <button type="submit" class="btn btn-default" >Login</button
+			
+  </form>
+</div>
+</html>
+

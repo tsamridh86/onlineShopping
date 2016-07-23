@@ -1,16 +1,20 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<!-- Latest compiled and minified
+JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <head>
-	<link rel="stylesheet" href="welcomePage.css">
 	<style>
 	p {font-family: sans-serif; }
 	p {font-weight: bold; }
 	</style>
 </head>
-<div style='position: absolute; top : 10px; left: 10px; z-index: 1;'>
-	Is this what you were looking for?
+<div style='position: absolute; top : 5px; left: 10px; z-index: 1;'>
+	<h4> Is this what you were looking for? </h4>
 </div>
-<!-- Login tab will only be displayed if there is no user logged in.
-& for a logged in user there will be a logout option -->
-<div style='position: absolute; top : 10px; right: 10px;z-index: 1;'>
+<div style='position: absolute; top : 10px; right: 100px;z-index: 1;'>
 	<?php
 		session_start();
 		if(empty($_SESSION['userType']))
@@ -19,26 +23,23 @@
 				<a class='login' href = 'LoginPage.php'>Login</a>";
 		else
 		{
-			echo "<a class='login' href= #>Welcome ".$_SESSION['userName']."</a>";
-			echo "<a class='login' href= 'NLI.php'> | Logout</a>";
+			echo "<a class='login' href= WelcomePage.php ><span class='glyphicon glyphicon-user' aria-hidden='true'>" . $_SESSION['userName'] . "</span></a>
+			<a class='login' href= 'NLI.php'><span class='glyphicon glyphicon-closed'aria-hidden='true'> | Logout</a>";
 		}
 		
 	?>
 </div>
+
 <?php
-	/*
-	The user has entered the item name that s/he requires, so search for it & display them accordingly
-	the cat is used when the user uses the navigational bar instead, it is given a different name than ategory because it can be confused with the radio button that is available in this page
-	*/
-	//connect to the database & all the things we have been thru lol
-	require 'config.php';
+	//cat is for the navigational bar
+    require 'config.php';
 	
 	//searching part here
 	$que = "select * from items where status = 'Y' and ";
-	if(!empty($_GET['query']))
+	if(!empty($_GET['query'])) // this is for search bar
 		$que = $que."itemName like '%".$_GET['query']."%' or brand like '%".$_GET['query']."%' and ";
-	if(!empty($_GET['shape']))
-		$que = $que."shape = '".$_GET['shape']."' and ";
+	if(!empty($_GET['shape'])) //side navigation bar
+		$que = $que."shape = '".$_GET['shape']."' and "; 
 	if(!empty($_GET['color']))
 		$que = $que."color = '".$_GET['color']."' and ";
 	if(!empty($_GET['category1']))
@@ -53,20 +54,12 @@
 		$que = $que."type = '".$_GET['type']."' and ";
 	if(!empty($_GET['brand']))
 		$que = $que."brand = '".$_GET['brand']."' and ";
-	// Now that the query has been made, wrench off the unnessecary and that is hanging behind, note that there are 4 characters , and  the space, use substr to wrench it off
 	$que = substr($que,0,-4);
-	//add the semicolon bro
 	$que = $que.";";
 	$result = $connect->query($que);
 	echo "	<form method = get action = 'search.php'>
-			<div style ='position:relative; top : 30px; left : 10px; border: 2px solid black; margin : 10px; width:270px; height : 80%; overflow:auto; padding : 3px;'>
+			<div style ='position:relative; top : 30px; left : 10px; border:2px solid grey; margin: 10px; box-shadow: 10px 10px 5px 	#DCDCDC; width:270px; height : 80%; overflow:auto; padding : 3px;'>
 			Enter the shape of the item.<br><br>";
-	/*
-	You may think the query maybe optimized as select shape, color, category from items;
-	but the reading pointer cannot be reset, so bad luck there honey,
-	execute the statement thrice instead. or if you're better than me :P
-	*/
-	// This is to show the shape of items
 	$sidebar = "select distinct shape from items where status = 'Y';";
 	$sidebar = $connect->query($sidebar);
 	while($prop = $sidebar->fetch_assoc())
@@ -112,25 +105,19 @@
 			
 	//for displaying search results
 	echo "<div style='overflow : auto; position: absolute; top: 50px; left: 330px; height: 80%; width: 70%;'>";
-	//a form is needed to change pages with the data intact
 	echo "<form method = get action = 'orderPage.php'>";
 		while($row = $result->fetch_assoc())
 		{
-			$locs = $row['imgLoc'];		//since the array name has '' the things got complex
-			
-			//category seperation tarika
+			$locs = $row['imgLoc'];		
 			$len = 0;
 			while($row['category'][$len++]!="_");
 			$cat1 = substr($row['category'],0,$len-1);
 			$cat2 = substr($row['category'],$len);
-			
-			//we only have the seller id of the person, this query is used to display it's actual name.
+			//to display actual name
 			$que = "select userName from users where userId = ".$row['sellerId'].";";
 			$sellerName = $connect->query($que);
 			$sellerName = $sellerName->fetch_assoc();
-			//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
-			
-			echo "<div style='position: relative; height : 380px; width : 75%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
+			echo "<div style='position: relative; height : 380px; width : 75%; top: 30px; left : 10px; border:2px solid grey; margin: 10px; box-shadow: 10px 10px 5px 	#DCDCDC; '>";
 			echo "<div style='position: absolute; top: 10px; left: 10px;'>";
 				echo "<img src = '$locs' height = 220 px width = 220px align = left>";
 			echo "</div>";
@@ -157,7 +144,7 @@
 			echo "</div>";
 			echo "</div>";
 		}
-		echo "</form>";	//just incase you were wondering which form has to be closed, I opened one before this loop
+		echo "</form>";
 	echo "</div>";
 	$connect->close();
 ?>

@@ -1,9 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>SignUp</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+</head>
 <?php
-	//This page redirects to itself, so, the database actions will take place if & only if all the parameters are sent.
-	if (!empty($_POST['userName']) && !empty($_POST['password']) && !empty($_POST['repassword']) && $_POST['password']==$_POST['repassword'] && !empty($_POST['authority']))
+	if (!empty($_POST['userName']) && !empty($_POST['password'])  && !empty($_POST['authority']))
 	{
 		require 'config.php';
-		//make sure that same userName does not exists, & if it does, simply warn the user.
 		$test = "select userName from users";
 		$allUsers = $connect->query($test);
 		$flag = 0;
@@ -24,7 +32,7 @@
 			$_SESSION['userName'] = $_POST['userName'];
 			$_SESSION['userId'] = $id['userId'];
 			if($_POST['authority'] == 'C')
-				header("location:welcomePage.php");
+				header("location:customer.php");
 			else if ($_POST['authority'] == 'A')
 				header("location:adminPage.php");
 			else if ($_POST['authority'] == 'S')
@@ -33,22 +41,21 @@
 		$connect->close();
 	}
 ?>
-<form action = "signUp.php" method = "post">
-	<table>
-		<tr>
-			<td>Enter your user name : </td>
-			<td><input name = 'userName' type = 'text' required></td>
-		</tr>
-		<tr>
-			<td>Enter your password : </td>
-			<td><input name = 'password' type ='password' required></td>
-		</tr>
-		<tr>
-			<td>Re-enter your password : </td>
-			<td><input name = 'repassword' type ='password' required></td>
-		</tr>
-		<tr>
-			<td>Authority level : </td>
+
+<div class="container">
+  <form method = "post" action = signUp.php>
+ 
+    <div class="form-group">
+      <label for="userName">Username:</label>
+      <input type="text" class="form-control" name="userName" placeholder="Enter name">
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" class="form-control" name="password" placeholder="Enter password">
+	  <p class="warning">The password must be 1-25 characters long.</p>
+    </div>
+	
+	<td>Authority level : </td>
 			<td>
 				<select name = 'authority'>
 					<option value="C">Customer</option>
@@ -56,10 +63,14 @@
 					<option value="A">Administrator</option>
 				</select>
 			</td>
-		</tr>
-		<tr>
-			<td><input type="submit" value="Sign Up" /></td>
+    <div class="checkbox">
+      <label><input type="checkbox"> Remember me</label>
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+	
 			<td><a href="welcomePage.php">Cancel</a></td>
 		</tr>
-	</table>
-</form>
+  </form>
+</div>
+</html>
+

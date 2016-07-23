@@ -1,3 +1,10 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<!-- Latest compiled and minified
+JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <head>
 <link rel="stylesheet" href="welcomePage.css">
 <style type="text/css">
@@ -7,8 +14,6 @@
 </head>
 
 <?php
-
-	//only admin authority, may pass here
 	session_start();
 	if($_SESSION['userType']!='A')
 		echo "You are not authorized to access the contents of this page.";
@@ -20,7 +25,6 @@
 	{
 		require 'config.php';
 		
-		//if there was an approval request, this shall occur
 		if(!empty($_POST['itemId']) && !empty($_POST['approve']))
 		{
 			$approve = "update items set status = 'Y' where itemId = ".$_POST['itemId'].";";
@@ -28,7 +32,7 @@
 		}
 
 
-		//to show stats, count the items on page
+		//to show stats status
 		$userData = "select * from users;";
 		$itemData = "select * from items where status = 'Y';";
 		$orderData = "select * from orders;";
@@ -47,9 +51,8 @@
 		$noOfBidItem  = mysqli_num_rows($noOfBidItem);
 		$noOfBids = mysqli_num_rows($noOfBids);
 
-		//this division is used to show the stats
 		echo"
-				<div style = 'width : 70%; top : 10px; left : 10px;'>
+				<div style = 'width : 70%; top : 10px; left : 10px;border:2px solid grey; margin: 50px; box-shadow: 10px 10px 5px 	#DCDCDC; '>
 					<table style ='padding: 5px;'>
 						<th>Stats</th>
 						<tr>
@@ -76,29 +79,26 @@
 			$itemPending = "select * from items where status = 'N';";
 			$res = $connect->query($itemPending);
 			echo "
-				<div style = 'height: 500px; overflow:auto;'>
+				<div style = 'height: 500px; overflow:auto;border:2px solid grey; margin: 50px; box-shadow: 10px 10px 5px 	#DCDCDC; '>
 				<form method = 'post' action = 'adminPage.php'>
 				<p>Pending requests:</p>
 				";
 			while($row = $res->fetch_assoc())
 			{
-				$locs = $row['imgLoc'];		//since the array name has '' the things got complex
-				
-				//category seperation tarika
+				$locs = $row['imgLoc'];		
 				$len = 0;
 				while($row['category'][$len++]!="_");
 				$cat1 = substr($row['category'],0,$len-1);
 				$cat2 = substr($row['category'],$len);
 				
-				//we only have the seller id of the person, this query is used to display it's actual name.
+				// to display actual name.
 				$que = "select userName from users where userId = ".$row['sellerId'].";";
 				$sellerName = $connect->query($que);
 				$sellerName = $sellerName->fetch_assoc();
-				//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
-		
+				
 				echo "<div style='position: relative; height : 330px; width : 70%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
-				echo "<div style='position: absolute; top: 10px; left: 10px;border:none;'>";
-				echo "<img src = '$locs' height = 220 px width = 220px align = left>";
+				echo "<div style='position: absolute; top: 10px; left: 10px;border:2px solid grey; margin: 50px; box-shadow: 10px 10px 5px 	#DCDCDC; '>";
+				echo "<img src = '$locs' class height = 220 px width = 220px align = left>";
 				echo "</div>";
 				echo "<div style='position: absolute; top: 10px; left: 270px;border:none;'>";
 				echo "<p> Sold By  : ".$sellerName['userName']."</p>";
@@ -119,26 +119,24 @@
 
 		//This div is used to display all the items in the database.
 		echo "
-				<div style = 'height: 500px; overflow:auto;'>
+				<div style = 'height: 500px; overflow:auto;border:2px solid grey; margin: 50px; box-shadow: 10px 10px 5px 	#DCDCDC; '>
 				<p>All the items on the database:</p>
 				";
 
 		while($row = $itemData->fetch_assoc())
 		{
-		$locs = $row['imgLoc'];		//since the array name has '' the things got complex
-		
+		$locs = $row['imgLoc'];		
 		$len = 0;
 		while($row['category'][$len++]!="_");
 		$cat1 = substr($row['category'],0,$len-1);
 		$cat2 = substr($row['category'],$len);
-		//we only have the seller id of the person, this query is used to display it's actual name.
+		//to display it's actual name.
 		$que = "select userName from users where userId = ".$row['sellerId'].";";
 		$sellerName = $connect->query($que);
 		$sellerName = $sellerName->fetch_assoc();
-		//this is to properly display inside a division for every item, (because this thing is in a for loop everyting is printed accordingly)
 		
 		echo "<div style='position: relative; height : 330px; width : 50%; top: 30px; left : 10px; border:2px solid black; margin: 10px; '>";
-		echo "<div style='position: absolute; top: 10px; left: 10px;border:none;'>";
+		echo "<div style='position: absolute; top: 10px; left: 10px;'>";
 		echo "<img src = '$locs' height = 220 px width = 220px align = left>";
 		echo "</div>";
 		echo "<div style='position: absolute; top: 10px; left: 270px;border:none;'>";
@@ -164,7 +162,7 @@
 
 		//This div is for all the users in the database
 		echo "
-				<div style = 'height: 300px; overflow:auto;'>
+				<div style = 'height: 300px; overflow:auto;border:2px solid grey; margin: 50px; box-shadow: 10px 10px 5px 	#DCDCDC; '>
 				<p>All the users on the database:</p>
 				<table>
 					<tr>
@@ -188,12 +186,11 @@
 		echo "</table></div>";
 
 		//This division is for all the orders in the database
-		//this ain't gonna be a easy one
 		$que = "select * from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId ";
 		$result = $connect->query($que);
 		
 		echo "
-				<div style = 'height: 300px; overflow:auto;'>
+				<div style = 'height: 300px; overflow:auto;border:2px solid grey; margin: 50px; box-shadow: 10px 10px 5px 	#DCDCDC; '>
 				<p>All the orders on the database:</p>
 				<table>
 					<tr>
@@ -228,7 +225,7 @@
 		$que = "select items.price , users.userName , items.itemName, items.sellerId , items.deadLine from items inner join users on users.userId = items.custId where type = 'B'";
 		$result = $connect->query($que);
 		echo "
-				<div style = 'height: 300px; overflow:auto;'>
+				<div style = 'height: 300px; overflow:auto;border:2px solid grey; margin: 50px; box-shadow: 10px 10px 5px 	#DCDCDC;'>
 				<p>All the bidding on the database:</p>
 				<table>
 					<tr>
@@ -264,8 +261,8 @@
 <!-- This is for the logout tab above -->
 <div style='position: absolute; top : 10px; right: 10px; border:none;'>
 <?php
-	echo "<a class='login' href= #>Welcome ".$_SESSION['userName']."</a>";
-	echo "<a class='login' href= 'NLI.php'> | Logout</a>";
+	echo "<a class='login' href= WelcomePage.php ><span class='glyphicon glyphicon-user' aria-hidden='true'>" . $_SESSION['userName'] . "</span></a>
+	<a class='login' href= 'NLI.php'><span class='glyphicon glyphicon-closed'aria-hidden='true'> | Logout</a>";
 
 ?>
 </div>

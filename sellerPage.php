@@ -1,12 +1,15 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+<!-- Latest compiled and minified
+JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <!DOCTYPE html>
 <head>
 	<link rel="stylesheet" href="welcomePage.css">
 </head>
-<!--
-This page is exclusive to the seller only, i will add the extension to redirect the page if the person using is not a seller
-Using the relation :
-item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), category varchar(20), itemId int primary key, price int , imgLoc varchar(50))
--->
+
 <?php
 	session_start();
 	
@@ -14,32 +17,25 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	if(empty($_SESSION['userType'])) header("location:welcomePage.php");
 	if($_SESSION['userType']=='C') header("location:welcomePage.php");
 	require 'config.php';
-	//this is to avoid the execution of adding into the database if everything is ready
 	if(!empty($_POST['itemName']) && !empty($_POST['price']) && !empty($_POST['brand'])&& is_uploaded_file($_FILES['image']['tmp_name']) && !empty($_POST['category1']) && !empty($_POST['category2']) && !empty($_POST['shape']) && !empty($_POST['color']))
 	{
-		//connect to the database & check whether as table exists for users
-		//some one may try login without the execution of the user table existence.
 		
 		//import image to the server page
 		$file_temp = $_FILES['image']['tmp_name'];
 		$file_name = $_FILES['image']['name'];
-		
-		
-		//if the same name of the file exists then rename it adding numbers to it
 		$i = 0 ;
 		while(file_exists("images/".$file_name))
 		{
-			if(!$i) //if($i ==0) this is used if there is only one copy
+			if(!$i) 
 			$file_name = substr($file_name,0,-4).$i.substr($file_name, -4);
-				else 	//this is used if there is more than one copy available
+				else 
 				$file_name = substr($file_name,0,-5).$i.substr($file_name, -4);
 			$i++;
 		}
-			$i = 0 ; 	//reset the value for i, since the loop has already run it's course.
+			$i = 0 ; 	
 			move_uploaded_file($file_temp,"images/".$file_name);	//this uploads it into the server
 		//combining categories
 		$category = $_POST['category1']."_".$_POST['category2'];
-		//there are two submit buttons, that determines whether it is to be kept on Bidding or sale, so
 		if($_POST['type']=='Keep On Bidding')
 			{
 				$type = 'B';
@@ -57,10 +53,10 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		
 	}
 ?>
-<!-- This division is for the items that are going to be added to database -->
-<div style="position: relative; top: 10px; left: 10px; border: 2px solid black; width: 50%; margin: 10px; padding: 10px;">
-	<form method = "post" action = "sellerPage.php" enctype="multipart/form-data">	<!-- enctype is for image transfer   -->
-	<table style="padding: 10px;">
+
+<div style="position: relative; top: 10px; left: 10px; border: 2px solid black; width: 90%; margin: 10px; padding: 10px; border:2px solid grey; margin: 50px; box-shadow: 10px 10px 5px 	#DCDCDC; ">
+	<form method = "post" action = "sellerPage.php" enctype="multipart/form-data">	
+	<table class="table table-stripped">
 		<th>Keep an item on sale</th>
 		<tr>
 			<td>Enter the name: </td>
@@ -128,14 +124,13 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 <!--This division is made if the seller wants to delete thier items
 	The idea is to display all the items that the seller has & will select it from the dropdown menu if he wants to delete it
 -->
-<div style="position: relative; margin: 10px; border: 2px solid black; width: 50%; top : 10px;left: 10px; padding: 10px;">
+<div style="position: relative; margin:10px; border: 2px solid black; width: 86%; top : 10px;left: 10px; padding:40px;border:2px solid grey; margin: 50px; box-shadow: 10px 10px 5px 	#DCDCDC; ">
 <h4>Select an item that you want to remove from the list</h4>
 <form method="get" action="sellerPage.php">
 <select name = 'toDelete'>
-<option value = 'none'>--Select an item to delete--</option>
+<option value = 'none'>--Select an item to delete--</option> 
 <?php
 	
-	// now, to actually display the things inside here to the seller
 	$que = "select itemId, itemName from items where sellerId =".$_SESSION['userId']." and status = 'Y';";
 	$result = $connect->query($que);
 	while ($row = $result->fetch_assoc())
@@ -154,7 +149,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 		//Now to actually delete the item from the items table
 		$que = "delete from items where itemId = ".$_GET['toDelete'].";";
 		$connect->query($que);
-		//it also has to be removed from the orders so
+		//to remove items from orders
 		$que = "delete from orders where itemId = ".$_GET['toDelete'].";";
 		$connect->query($que);
 		
@@ -162,16 +157,9 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	}
 ?>
 </div>
-<!-- This is for the the items that the seller has to deliver to various people -->
-<div style="position: relative;margin: 10px; border: 2px solid black; width: 50%; top : 10px;left: 10px; padding: 10px;">
+<!-- items that are to be delivered -->
+<div style="position: relative;margin: 10px; border: 2px solid black; width: 50%; top : 10px;left: 10px; padding: 10px; border:2px solid grey; margin: 50px; box-shadow: 10px 10px 5px 	#DCDCDC;">
 <?php
-	
-	
-	//the objective here is to display what items needs to delievered to what person in what quantity
-	//so using the natural join between items, orders and users, we can obtain all of this
-	//there is no need to create user table if not exists, you would not be in this page if you were not a seller lol
-	//this is to only display the items that have been ordered
-	//this ain't gonna be a easy one
 	$que = "select userName, itemName , quantity, price from (items inner join orders on items.itemId = orders.itemId) inner join users on orders.custId = users.userId where sellerId = ".$_SESSION['userId'].";";
 	$result = $connect->query($que);
 	echo "<table width = 90% style = 'padding : 5px; margin : 5px;'>
@@ -183,7 +171,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 				<td> Rate </td>
 				<td> Grand total </td>
 			</tr>";
-			// The value of grand total is not stored in database because it is a derived attribute & hence causes a wastage of space.
+			
 	while($row = $result->fetch_assoc())
 	{
 			echo "	<tr>
@@ -195,7 +183,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 					</tr>	";
 	}
 	echo "</table>";
-	//this is for the items that are for bidding
+	//items on bid
 	$que = "select items.price , users.userName , items.itemName, items.status from items inner join users on users.userId = items.custId where sellerId = ".$_SESSION['userId']." and type = 'B' and status = 'Y' or status = 'D';";
 	$result = $connect->query($que);
 	echo "<table width = 90% style = 'padding : 5px; margin : 5px;'>
@@ -206,7 +194,7 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 				<td> Current Price </td>
 				<td> Bidding Status </td>
 			</tr>";
-			// The value of grand total is not stored in database because it is a derived attribute & hence causes a wastage of space.
+	
 	while($row = $result->fetch_assoc())
 	{
 		echo "	<tr>
@@ -221,10 +209,10 @@ item ( sellerId int , itemName varchar(50),shape varchar(20),color varchar(20), 
 	$connect->close();
 ?>
 </div>
-<!-- This is for the logout tab above -->
 <div style='position: absolute; top : 10px; right: 10px;'>
 <?php
-	echo "<a class='login' href= #>Welcome ".$_SESSION['userName']."</a>";
-	echo "<a class='login' href= 'NLI.php'> | Logout</a>";
+echo "<a class='login' href= WelcomePage.php ><span class='glyphicon glyphicon-user' aria-hidden='true'>" . $_SESSION['userName'] . "</span></a>
+			<a class='login' href= 'NLI.php'><span class='glyphicon glyphicon-closed'aria-hidden='true'> | Logout</a>";
+	
 ?>
 </div>
